@@ -45,16 +45,16 @@
         <!-- Quick Stats -->
         <div class="quick-stats">
             <div class="stat-box">
-                <div class="stat-value">24</div>
+                <div class="stat-value">{{ total_scans }}</div>
                 <div class="stat-label">Scans</div>
             </div>
             <div class="stat-box">
-                <div class="stat-value">8</div>
+                <div class="stat-value">{{ threats_detected }}</div>
                 <div class="stat-label">Threats</div>
             </div>
             <div class="stat-box">
-                <div class="stat-value">16</div>
-                <div class="stat-label">Blocked</div>
+                <div class="stat-value">{{ safe_scans }}</div>
+                <div class="stat-label">Safe</div>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
     <div class="menu-section">
         <h3 class="section-title">Main Features</h3>
         <div class="menu-list">
-            <a href="{% url 'scan' %}" class="menu-item">
+            <a href="/scan/" class="menu-item">
                 <div class="menu-icon blue">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
@@ -74,7 +74,7 @@
                 <i class="fa-solid fa-chevron-right"></i>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="/verify-payment/" class="menu-item">
                 <div class="menu-icon green">
                     <i class="fa-solid fa-circle-check"></i>
                 </div>
@@ -85,7 +85,7 @@
                 <i class="fa-solid fa-chevron-right"></i>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="/history/" class="menu-item">
                 <div class="menu-icon purple">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                 </div>
@@ -96,7 +96,7 @@
                 <i class="fa-solid fa-chevron-right"></i>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="/reports/" class="menu-item">
                 <div class="menu-icon orange">
                     <i class="fa-solid fa-file-lines"></i>
                 </div>
@@ -113,7 +113,7 @@
     <div class="menu-section">
         <h3 class="section-title">Security & Tools</h3>
         <div class="menu-list">
-            <a href="{% url 'web-protection' %}" class="menu-item">
+            <a href="/web-protection/" class="menu-item">
                 <div class="menu-icon blue">
                     <i class="fa-solid fa-globe"></i>
                 </div>
@@ -124,7 +124,7 @@
                 <i class="fa-solid fa-chevron-right"></i>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="/education/" class="menu-item">
                 <div class="menu-icon yellow">
                     <i class="fa-solid fa-lightbulb"></i>
                 </div>
@@ -135,7 +135,7 @@
                 <i class="fa-solid fa-chevron-right"></i>
             </a>
 
-            <a href="{% url 'alerts' %}" class="menu-item">
+            <a href="/alerts/" class="menu-item">
                 <div class="menu-icon red">
                     <i class="fa-solid fa-bell"></i>
                 </div>
@@ -153,7 +153,7 @@
     <div class="menu-section">
         <h3 class="section-title">Account & Settings</h3>
         <div class="menu-list">
-            <a href="#" class="menu-item">
+            <a href="/settings/" class="menu-item">
                 <div class="menu-icon gray">
                     <i class="fa-solid fa-gear"></i>
                 </div>
@@ -164,7 +164,7 @@
                 <i class="fa-solid fa-chevron-right"></i>
             </a>
 
-            <a href="{% url 'menu' %}" class="menu-item">
+            <a href="/menu/" class="menu-item">
                 <div class="menu-icon gray">
                     <i class="fa-solid fa-user"></i>
                 </div>
@@ -175,7 +175,7 @@
                 <i class="fa-solid fa-chevron-right"></i>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="/settings/" class="menu-item">
                 <div class="menu-icon gray">
                     <i class="fa-solid fa-bell"></i>
                 </div>
@@ -192,7 +192,7 @@
     <div class="menu-section">
         <h3 class="section-title">Help & Support</h3>
         <div class="menu-list">
-            <a href="#" class="menu-item">
+            <a href="/help/" class="menu-item">
                 <div class="menu-icon gray">
                     <i class="fa-solid fa-circle-question"></i>
                 </div>
@@ -203,7 +203,7 @@
                 <i class="fa-solid fa-chevron-right"></i>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="/about/" class="menu-item">
                 <div class="menu-icon gray">
                     <i class="fa-solid fa-circle-info"></i>
                 </div>
@@ -245,8 +245,7 @@
     </div>
 
     <!-- Logout Button -->
-    <a href="{% url 'logout' %}" class="logout-btn" id="logout-btn"
-        onclick="return confirm('Are you sure you want to logout?')">
+    <a href="/logout/" class="logout-btn" id="logout-btn" onclick="return confirm('Are you sure you want to logout?')">
         <i class="fa-solid fa-right-from-bracket"></i>
         <span>Logout</span>
     </a>

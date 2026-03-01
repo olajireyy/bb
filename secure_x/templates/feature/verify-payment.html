@@ -1,0 +1,653 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSense Hub - Verify Payment</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Verify Payment CSS -->
+    <link rel="stylesheet" href="{% static 'css/verify-payment.css' %}">
+</head>
+
+<!-- Top Header -->
+<header class="top-header">
+    <div class="header-content">
+        <a href="/dashboard/" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h1>Cyber<span>Sense</span> HUB</h1>
+        </div>
+        <div class="header-spacer"></div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="verify-container">
+    <!-- Page Title -->
+    <div class="page-title">
+        <h2>Verify Payment Alert</h2>
+        <p>Upload bank alert to check authenticity</p>
+    </div>
+
+    <!-- Info Banner -->
+    <div class="info-banner">
+        <i class="fa-solid fa-circle-info"></i>
+        <div>
+            <p><strong>How it works:</strong> Upload a screenshot of the bank alert you received. We'll analyze it for
+                signs of manipulation or fake patterns.</p>
+        </div>
+    </div>
+
+    <!-- Verification Stats -->
+    <div class="stats-section">
+        <div class="stat-box">
+            <div class="stat-icon green">
+                <i class="fa-solid fa-check-circle"></i>
+            </div>
+            <div class="stat-details">
+                <div class="stat-value">156</div>
+                <div class="stat-label">Verified</div>
+            </div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-icon red">
+                <i class="fa-solid fa-xmark-circle"></i>
+            </div>
+            <div class="stat-details">
+                <div class="stat-value">23</div>
+                <div class="stat-label">Fake Detected</div>
+            </div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-icon orange">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="stat-details">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Suspicious</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Section -->
+    <div class="upload-section" id="upload-section">
+        <h3>Upload Bank Alert</h3>
+
+        <!-- Upload Area -->
+        <div class="upload-area" id="upload-area">
+            <input type="file" id="file-input" accept="image/*" hidden>
+            <div class="upload-content">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <p><strong>Click to upload</strong> or drag and drop</p>
+                <p class="upload-hint">PNG, JPG, JPEG (Max 10MB)</p>
+            </div>
+        </div>
+
+        <!-- Image Preview -->
+        <div class="image-preview" id="image-preview" style="display: none;">
+            <div class="preview-header">
+                <h4>Uploaded Image</h4>
+                <button class="remove-image" id="remove-image">
+                    <i class="fa-solid fa-trash"></i> Remove
+                </button>
+            </div>
+            <img id="preview-img" src="" alt="Preview">
+        </div>
+
+        <!-- Upload Tips -->
+        <div class="upload-tips">
+            <p><strong>Tips for best results:</strong></p>
+            <ul>
+                <li>Ensure the image is clear and readable</li>
+                <li>Capture the entire alert message</li>
+                <li>Avoid blurry or cropped screenshots</li>
+                <li>Good lighting improves text detection</li>
+            </ul>
+        </div>
+
+        <!-- Verify Button -->
+        <button class="verify-btn" id="verify-btn" disabled>
+            <i class="fa-solid fa-shield-check"></i>
+            <span>VERIFY PAYMENT</span>
+        </button>
+    </div>
+
+    <!-- Processing State -->
+    <div class="processing-section" id="processing-section" style="display: none;">
+        <div class="processing-card">
+            <div class="spinner-large"></div>
+            <h3>Analyzing Payment Alert...</h3>
+            <p>Extracting text and checking for manipulation</p>
+            <div class="processing-steps">
+                <div class="step active">
+                    <i class="fa-solid fa-check-circle"></i>
+                    <span>Image uploaded</span>
+                </div>
+                <div class="step active">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <span>Extracting text (OCR)...</span>
+                </div>
+                <div class="step">
+                    <i class="fa-solid fa-circle"></i>
+                    <span>Analyzing patterns</span>
+                </div>
+                <div class="step">
+                    <i class="fa-solid fa-circle"></i>
+                    <span>Generating report</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section" id="results-section" style="display: none;">
+        <div class="result-card" id="result-card">
+            <!-- Result Header -->
+            <div class="result-header">
+                <div class="result-icon" id="result-icon">
+                    <i class="fa-solid fa-xmark-circle"></i>
+                </div>
+                <div>
+                    <div class="result-status" id="result-status">FAKE ALERT DETECTED</div>
+                    <p class="result-subtitle">This payment alert shows signs of manipulation</p>
+                </div>
+            </div>
+
+            <!-- Extracted Text -->
+            <div class="extracted-text-section">
+                <h4><i class="fa-solid fa-file-lines"></i> Extracted Text</h4>
+                <div class="extracted-text-box" id="extracted-text">
+                    GTBank Alert
+                    Acct: 0123456789
+                    Amt: NGN 50,000.00
+                    Desc: Transfer from John Doe
+                    Time: 14:30:25
+                    Avail Bal: NGN 75,000.00
+                </div>
+            </div>
+
+            <!-- Verification Checklist -->
+            <div class="checklist-section">
+                <h4><i class="fa-solid fa-clipboard-check"></i> Verification Checklist</h4>
+                <div class="checklist">
+                    <div class="checklist-item failed">
+                        <i class="fa-solid fa-xmark-circle"></i>
+                        <span>No recognized bank name found</span>
+                    </div>
+                    <div class="checklist-item passed">
+                        <i class="fa-solid fa-check-circle"></i>
+                        <span>Transaction reference format valid</span>
+                    </div>
+                    <div class="checklist-item failed">
+                        <i class="fa-solid fa-xmark-circle"></i>
+                        <span>Missing proper timestamp</span>
+                    </div>
+                    <div class="checklist-item passed">
+                        <i class="fa-solid fa-check-circle"></i>
+                        <span>Amount format correct</span>
+                    </div>
+                    <div class="checklist-item failed">
+                        <i class="fa-solid fa-xmark-circle"></i>
+                        <span>Inconsistent font styling</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Score -->
+            <div class="risk-score-section">
+                <h4>Risk Score</h4>
+                <div class="score-bar">
+                    <div class="score-fill fake" id="score-fill" style="width: 85%"></div>
+                </div>
+                <div class="score-details">
+                    <span class="score-value" id="score-value">85/100</span>
+                    <span class="score-label" id="score-label">High Risk</span>
+                </div>
+            </div>
+
+            <!-- Findings -->
+            <div class="findings-section">
+                <h4><i class="fa-solid fa-magnifying-glass"></i> Key Findings</h4>
+                <ul class="findings-list">
+                    <li>Bank name does not match recognized Nigerian banks</li>
+                    <li>Timestamp format inconsistent with standard bank alerts</li>
+                    <li>Font styling shows signs of manual editing</li>
+                    <li>Transaction reference number format unusual</li>
+                </ul>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="recommendations-section">
+                <h4><i class="fa-solid fa-lightbulb"></i> Recommendations</h4>
+                <div class="recommendation-box danger">
+                    <i class="fa-solid fa-ban"></i>
+                    <div>
+                        <p><strong>DO NOT release goods or services</strong></p>
+                        <p>This alert shows multiple signs of manipulation</p>
+                    </div>
+                </div>
+                <ul class="recommendations-list">
+                    <li><i class="fa-solid fa-check-circle"></i> Call your bank directly to confirm the transaction</li>
+                    <li><i class="fa-solid fa-check-circle"></i> Check your actual account balance via official app/USSD
+                    </li>
+                    <li><i class="fa-solid fa-check-circle"></i> Request the customer to show original SMS from bank
+                    </li>
+                    <li><i class="fa-solid fa-check-circle"></i> Report this incident to law enforcement</li>
+                </ul>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="result-actions">
+                <button class="btn-secondary" id="verify-another-btn">
+                    <i class="fa-solid fa-rotate"></i> Verify Another
+                </button>
+                <button class="btn-primary" id="save-result-btn">
+                    <i class="fa-solid fa-bookmark"></i> Save Result
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Common Fake Alert Patterns -->
+    <div class="patterns-section">
+        <h3>Common Fake Alert Patterns</h3>
+        <div class="patterns-grid">
+            <div class="pattern-card">
+                <i class="fa-solid fa-font"></i>
+                <h4>Wrong Font</h4>
+                <p>Fake alerts often use incorrect or inconsistent fonts</p>
+            </div>
+
+            <div class="pattern-card">
+                <i class="fa-solid fa-building-columns"></i>
+                <h4>No Bank Logo</h4>
+                <p>Missing or poor quality bank logo/branding</p>
+            </div>
+
+            <div class="pattern-card">
+                <i class="fa-solid fa-clock"></i>
+                <h4>Time Format</h4>
+                <p>Unusual timestamp format or missing time</p>
+            </div>
+
+            <div class="pattern-card">
+                <i class="fa-solid fa-hashtag"></i>
+                <h4>No Reference</h4>
+                <p>Missing transaction reference number</p>
+            </div>
+
+            <div class="pattern-card">
+                <i class="fa-solid fa-spell-check"></i>
+                <h4>Spelling Errors</h4>
+                <p>Typos or grammatical mistakes in the text</p>
+            </div>
+
+            <div class="pattern-card">
+                <i class="fa-solid fa-align-left"></i>
+                <h4>Poor Alignment</h4>
+                <p>Misaligned text or irregular spacing</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification History Link -->
+    <div class="history-link-section">
+        <a href="../Feature/history.html" class="history-link">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>View Verification History</span>
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
+    </div>
+
+    <!-- Bottom Spacer -->
+    <div class="bottom-spacer"></div>
+</main>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+    <a href="../Core/dashboard.html" class="nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+    </a>
+    <a href="../Core/scan.html" class="nav-item">
+        <i class="fa-solid fa-file"></i>
+        <span>Scan</span>
+    </a>
+    <a href="../Core/web-protection.html" class="nav-item">
+        <i class="fa-solid fa-globe"></i>
+        <span>Web</span>
+    </a>
+    <a href="../Core/alerts.html" class="nav-item">
+        <i class="fa-solid fa-bell"></i>
+        <span>Alerts</span>
+    </a>
+    <a href="../Core/menu.html" class="nav-item">
+        <i class="fa-solid fa-bars"></i>
+        <span>Menu</span>
+    </a>
+</nav>
+
+<!-- JavaScript -->
+<script>
+    // Elements
+    const uploadArea = document.getElementById('upload-area');
+    const fileInput = document.getElementById('file-input');
+    const imagePreview = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+    const removeImageBtn = document.getElementById('remove-image');
+    const verifyBtn = document.getElementById('verify-btn');
+    const uploadSection = document.getElementById('upload-section');
+    const processingSection = document.getElementById('processing-section');
+    const resultsSection = document.getElementById('results-section');
+    const verifyAnotherBtn = document.getElementById('verify-another-btn');
+    const saveResultBtn = document.getElementById('save-result-btn');
+
+    // Upload Area Click
+    uploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    // File Input Change
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB!');
+                return;
+            }
+            displayImage(file);
+        }
+    });
+
+    // Drag and Drop
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB!');
+                return;
+            }
+            fileInput.files = e.dataTransfer.files;
+            displayImage(file);
+        } else {
+            alert('Please upload an image file (PNG, JPG, JPEG)');
+        }
+    });
+
+    // Display Image
+    function displayImage(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImg.src = e.target.result;
+            uploadArea.style.display = 'none';
+            imagePreview.style.display = 'block';
+            verifyBtn.disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Remove Image
+    removeImageBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fileInput.value = '';
+        uploadArea.style.display = 'block';
+        imagePreview.style.display = 'none';
+        verifyBtn.disabled = true;
+    });
+
+    // Verify Payment Button
+    verifyBtn.addEventListener('click', () => {
+        startVerification();
+    });
+
+    // Start Verification Process
+    async function startVerification() {
+        // Hide upload section
+        uploadSection.style.display = 'none';
+
+        // Show processing section
+        processingSection.style.display = 'block';
+
+        // Start Visual Loading Steps
+        let currentStep = 1;
+        const steps = document.querySelectorAll('.step');
+        const interval = setInterval(() => {
+            if (currentStep < steps.length) {
+                steps[currentStep].classList.add('active');
+                steps[currentStep].querySelector('i').className = 'fa-solid fa-spinner fa-spin';
+                if (currentStep > 0) {
+                    steps[currentStep - 1].querySelector('i').className = 'fa-solid fa-check-circle';
+                }
+                currentStep++;
+            } else {
+                clearInterval(interval);
+                steps[steps.length - 1].classList.add('active');
+                steps[steps.length - 1].querySelector('i').className = 'fa-solid fa-check-circle';
+            }
+        }, 600);
+
+        // Actually fire the fetch
+        const formData = new FormData();
+        formData.append('image', fileInput.files[0]);
+
+        try {
+            const response = await fetch('/api/verify_payment/', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) throw new Error('Failed to verify payment');
+
+            const data = await response.json();
+
+            // Wait for animations to catch up (at least 2.5 seconds)
+            setTimeout(() => {
+                clearInterval(interval);
+                steps[steps.length - 1].classList.add('active');
+                steps[steps.length - 1].querySelector('i').className = 'fa-solid fa-check-circle';
+                showResults(data);
+            }, 2500);
+
+        } catch (error) {
+            console.error('Error verifying payment:', error);
+            showNotification('Error verifying payment. Please try again.');
+            resetVerification();
+        }
+    }
+
+    // Show Results
+    function showResults(resultData) {
+        // Hide processing section
+        processingSection.style.display = 'none';
+
+        // Show results section
+        resultsSection.style.display = 'block';
+
+        // Scroll to results
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        updateResultsUI(resultData);
+    }
+
+    // Update Results UI
+    function updateResultsUI(result) {
+        const resultIcon = document.getElementById('result-icon');
+        const resultStatus = document.getElementById('result-status');
+        const scoreFill = document.getElementById('score-fill');
+        const scoreValue = document.getElementById('score-value');
+        const scoreLabel = document.getElementById('score-label');
+        const extractedText = document.getElementById('extracted-text');
+
+        // Update icon and status
+        resultIcon.className = `result-icon ${result.status}`;
+        resultStatus.className = `result-status ${result.status}`;
+
+        if (result.status === 'fake') {
+            resultIcon.innerHTML = '<i class="fa-solid fa-xmark-circle"></i>';
+            resultStatus.textContent = 'FAKE ALERT DETECTED';
+            scoreLabel.textContent = 'High Risk';
+        } else if (result.status === 'genuine') {
+            resultIcon.innerHTML = '<i class="fa-solid fa-check-circle"></i>';
+            resultStatus.textContent = 'GENUINE ALERT';
+            scoreLabel.textContent = 'Low Risk';
+        } else {
+            resultIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            resultStatus.textContent = 'SUSPICIOUS ALERT';
+            scoreLabel.textContent = 'Medium Risk';
+        }
+
+        // Update score
+        scoreFill.className = `score-fill ${result.status}`;
+        scoreFill.style.width = result.score + '%';
+        scoreValue.textContent = result.score + '/100';
+        scoreLabel.className = `score-label ${result.status}`;
+
+        // Update extracted text
+        extractedText.textContent = result.extractedText;
+
+        // Update checklist
+        const checklistContainer = document.querySelector('.checklist');
+        checklistContainer.innerHTML = '';
+        result.checklist.forEach(item => {
+            const checklistItem = document.createElement('div');
+            checklistItem.className = `checklist-item ${item.passed ? 'passed' : 'failed'}`;
+            checklistItem.innerHTML = `
+                    <i class="fa-solid fa-${item.passed ? 'check' : 'xmark'}-circle"></i>
+                    <span>${item.text}</span>
+                `;
+            checklistContainer.appendChild(checklistItem);
+        });
+
+        // Update findings
+        const findingsList = document.querySelector('.findings-list');
+        findingsList.innerHTML = '';
+        result.findings.forEach(finding => {
+            const li = document.createElement('li');
+            li.textContent = finding;
+            findingsList.appendChild(li);
+        });
+    }
+
+    // Verify Another Button
+    verifyAnotherBtn.addEventListener('click', () => {
+        resetVerification();
+    });
+
+    // Reset Verification
+    function resetVerification() {
+        // Clear file input
+        fileInput.value = '';
+
+        // Reset UI
+        uploadArea.style.display = 'block';
+        imagePreview.style.display = 'none';
+        verifyBtn.disabled = true;
+
+        // Reset sections
+        uploadSection.style.display = 'block';
+        processingSection.style.display = 'none';
+        resultsSection.style.display = 'none';
+
+        // Reset processing steps
+        const steps = document.querySelectorAll('.step');
+        steps.forEach((step, index) => {
+            if (index === 0) {
+                step.classList.add('active');
+                step.querySelector('i').className = 'fa-solid fa-check-circle';
+            } else {
+                step.classList.remove('active');
+                step.querySelector('i').className = 'fa-solid fa-circle';
+            }
+        });
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Save Result Button
+    saveResultBtn.addEventListener('click', () => {
+        // TODO: Save to backend
+        showNotification('Verification result saved successfully!');
+
+        // Optionally redirect to history
+        setTimeout(() => {
+            // window.location.href = 'history.html';
+        }, 1500);
+    });
+
+    // Show Notification
+    function showNotification(message) {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: #00D084;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                font-size: 14px;
+                font-weight: 600;
+            `;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+    document.head.appendChild(style);
+
+</script>
+{% endblock %}

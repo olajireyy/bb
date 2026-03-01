@@ -1,0 +1,565 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSense Hub - Campus Reports</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Reports CSS -->
+    <link rel="stylesheet" href="{% static 'css/reports.css' %}">
+</head>
+
+<!-- Top Header -->
+<header class="top-header">
+    <div class="header-content">
+        <a href="/dashboard/" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h1>Cyber<span>Sense</span> HUB</h1>
+        </div>
+        <div class="header-right">
+            <button class="submit-report-btn" onclick="location.href='/submit_report/'">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="reports-container">
+    <!-- Page Title -->
+    <div class="page-title">
+        <h2>Campus Reports</h2>
+        <p>Track and manage security incidents</p>
+    </div>
+
+    <!-- Campus Selector -->
+    <div class="campus-selector">
+        <label for="campus-select">
+            <i class="fa-solid fa-building-columns"></i> Campus
+        </label>
+        <select id="campus-select">
+            <option value="unilag">University of Lagos</option>
+            <option value="covenant">Covenant University</option>
+            <option value="oau">Obafemi Awolowo University</option>
+            <option value="ui">University of Ibadan</option>
+            <option value="abu">Ahmadu Bello University</option>
+        </select>
+    </div>
+
+    <!-- Campus Statistics -->
+    <div class="campus-stats">
+        <div class="stat-card">
+            <div class="stat-icon blue">
+                <i class="fa-solid fa-file-lines"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-number">{{ total_count }}</div>
+                <div class="stat-label">Total Reports</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon red">
+                <i class="fa-solid fa-exclamation-circle"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-number">{{ active_count }}</div>
+                <div class="stat-label">Active</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon green">
+                <i class="fa-solid fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-number">{{ resolved_count }}</div>
+                <div class="stat-label">Resolved</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trending Threats Banner -->
+    <div class="trending-banner">
+        <div class="trending-icon">
+            <i class="fa-solid fa-fire"></i>
+        </div>
+        <div class="trending-content">
+            <h4>Trending Threats on Campus</h4>
+            <p><strong>Fake Scholarship Scams</strong> - 5 reports in the last 7 days</p>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">
+                All <span class="tab-count">{{ total_count }}</span>
+            </button>
+            <button class="filter-tab" data-filter="pending">
+                Pending
+            </button>
+            <button class="filter-tab" data-filter="investigating">
+                Investigating
+            </button>
+            <button class="filter-tab" data-filter="resolved">
+                Resolved <span class="tab-count">{{ resolved_count }}</span>
+            </button>
+        </div>
+
+        <div class="filter-dropdown">
+            <select id="type-filter">
+                <option value="all">All Types</option>
+                <option value="scam">Scam</option>
+                <option value="cyberbullying">Cyberbullying</option>
+                <option value="hacking">Account Hacking</option>
+                <option value="impersonation">Impersonation</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Reports List -->
+    <div class="reports-list">
+        {% for report in reports %}
+        <div class="report-card" data-status="{{ report.status|lower }}" data-type="{{ report.incident_type|lower }}">
+            <div class="report-header">
+                <div class="report-type-icon {{ report.incident_type|lower }}">
+                    {% if report.incident_type == 'scam' %}
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    {% elif report.incident_type == 'hacking' %}
+                    <i class="fa-solid fa-user-lock"></i>
+                    {% elif report.incident_type == 'impersonation' %}
+                    <i class="fa-solid fa-user-secret"></i>
+                    {% elif report.incident_type == 'cyberbullying' %}
+                    <i class="fa-solid fa-comments"></i>
+                    {% else %}
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    {% endif %}
+                </div>
+                <div class="report-main">
+                    <h3>{{ report.title }}</h3>
+                    <p class="report-description">{{ report.description|truncatechars:100 }}</p>
+                    <div class="report-meta">
+                        <span class="report-time"><i class="fa-solid fa-clock"></i> {{ report.created_at|timesince }}
+                            ago</span>
+                        <span class="report-id">{{ report.report_id }}</span>
+                        <span class="report-user"><i class="fa-solid fa-user"></i> {% if report.is_anonymous
+                            %}Anonymous{% else %}{{ report.user.full_name|default:"User" }}{% endif %}</span>
+                    </div>
+                </div>
+                <div class="report-badges">
+                    <span class="badge badge-{{ report.status|lower }}">{{ report.status }}</span>
+                    <span class="badge badge-{{ report.priority|lower }}">{{ report.priority|title }}</span>
+                </div>
+            </div>
+            <div class="report-footer">
+                <button class="btn-view" onclick="viewReportDetails('{{ report.report_id }}')">
+                    <i class="fa-solid fa-eye"></i> View Details
+                </button>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <i class="fa-solid fa-file-circle-xmark"></i>
+            <h3>No Reports Found</h3>
+            <p>There are currently no reports for this campus.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Submit Report CTA -->
+    <div class="submit-cta">
+        <div class="cta-content">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h3>Report a Security Incident</h3>
+            <p>Help keep our campus safe by reporting suspicious activities</p>
+            <button class="btn-submit-report" onclick="location.href='/submit_report/'">
+                <i class="fa-solid fa-plus"></i> Submit New Report
+            </button>
+        </div>
+    </div>
+
+    <!-- Empty State (Hidden by default) -->
+    <div class="empty-state" id="empty-state" style="display: none;">
+        <i class="fa-solid fa-file-circle-xmark"></i>
+        <h3>No Reports Found</h3>
+        <p>No reports match your current filters</p>
+        <button class="btn-primary" onclick="resetFilters()">
+            Reset Filters
+        </button>
+    </div>
+
+    <!-- Bottom Spacer -->
+    <div class="bottom-spacer"></div>
+</main>
+
+<!-- Bottom Navigation -->
+
+<!-- JavaScript -->
+<script>
+    // Elements
+    const campusSelect = document.getElementById('campus-select');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const typeFilter = document.getElementById('type-filter');
+    const reportCards = document.querySelectorAll('.report-card');
+    const emptyState = document.getElementById('empty-state');
+    const reportsList = document.querySelector('.reports-list');
+    const submitCta = document.querySelector('.submit-cta');
+
+    // Campus Selector Change
+    campusSelect.addEventListener('change', () => {
+        const selectedCampus = campusSelect.value;
+        console.log('Selected campus:', selectedCampus);
+
+        // TODO: Fetch reports for selected campus from backend
+        // For now, just show a notification
+        showNotification(`Loading reports for ${campusSelect.options[campusSelect.selectedIndex].text}...`);
+
+        // Simulate loading
+        setTimeout(() => {
+            updateStats();
+        }, 1000);
+    });
+
+    // Filter Tabs
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active from all tabs
+            filterTabs.forEach(t => t.classList.remove('active'));
+
+            // Add active to clicked tab
+            tab.classList.add('active');
+
+            // Get filter value
+            const filter = tab.getAttribute('data-filter');
+
+            // Apply filter
+            applyFilters();
+        });
+    });
+
+    // Type Filter
+    typeFilter.addEventListener('change', () => {
+        applyFilters();
+    });
+
+    // Apply Filters
+    function applyFilters() {
+        const statusFilter = document.querySelector('.filter-tab.active').getAttribute('data-filter');
+        const typeFilterValue = typeFilter.value;
+
+        let visibleCount = 0;
+
+        reportCards.forEach(card => {
+            const cardStatus = card.getAttribute('data-status');
+            const cardType = card.getAttribute('data-type');
+
+            let showCard = true;
+
+            // Status filter
+            if (statusFilter !== 'all' && cardStatus !== statusFilter) {
+                showCard = false;
+            }
+
+            // Type filter
+            if (typeFilterValue !== 'all' && cardType !== typeFilterValue) {
+                showCard = false;
+            }
+
+            if (showCard) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Show/hide empty state
+        if (visibleCount === 0) {
+            reportsList.style.display = 'none';
+            submitCta.style.display = 'none';
+            emptyState.style.display = 'block';
+        } else {
+            reportsList.style.display = 'flex';
+            submitCta.style.display = 'block';
+            emptyState.style.display = 'none';
+        }
+    }
+
+    // Reset Filters
+    function resetFilters() {
+        // Reset tabs
+        filterTabs.forEach(tab => tab.classList.remove('active'));
+        document.querySelector('[data-filter="all"]').classList.add('active');
+
+        // Reset type filter
+        typeFilter.value = 'all';
+
+        // Show all cards
+        reportCards.forEach(card => {
+            card.style.display = 'block';
+        });
+
+        // Hide empty state
+        reportsList.style.display = 'flex';
+        submitCta.style.display = 'block';
+        emptyState.style.display = 'none';
+    }
+
+    // View Report Details
+    function viewReportDetails(reportId) {
+        // TODO: Navigate to report details page or show modal
+        console.log('Viewing report:', reportId);
+
+        // For now, show alert with report info
+        alert(`Viewing details for report: ${reportId}\n\nThis will open a detailed view of the report with full information, evidence, and investigation status.`);
+
+        // In production, you would navigate to details page:
+        // window.location.href = `report-details.html?id=${reportId}`;
+    }
+
+    // Update Stats
+    function updateStats() {
+        // Count reports by status
+        const totalReports = reportCards.length;
+        const activeReports = document.querySelectorAll('[data-status="pending"]').length;
+        const investigatingReports = document.querySelectorAll('[data-status="investigating"]').length;
+        const resolvedReports = document.querySelectorAll('[data-status="resolved"]').length;
+
+        // Update stat cards
+        const statNumbers = document.querySelectorAll('.stat-number');
+        statNumbers[0].textContent = totalReports;
+        statNumbers[1].textContent = activeReports + investigatingReports;
+        statNumbers[2].textContent = resolvedReports;
+
+        // Update tab counts
+        document.querySelector('[data-filter="all"] .tab-count').textContent = totalReports;
+        document.querySelector('[data-filter="pending"] .tab-count').textContent = activeReports;
+        document.querySelector('[data-filter="investigating"] .tab-count').textContent = investigatingReports;
+        document.querySelector('[data-filter="resolved"] .tab-count').textContent = resolvedReports;
+    }
+
+    // Show Notification
+    function showNotification(message) {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: #00D084;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                font-size: 14px;
+                font-weight: 600;
+                max-width: 300px;
+            `;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+    document.head.appendChild(style);
+
+    // Detect Trending Threats
+    function detectTrendingThreats() {
+        // Count report types in the last 7 days
+        const reportTypes = {};
+
+        reportCards.forEach(card => {
+            const type = card.getAttribute('data-type');
+            const timeText = card.querySelector('.report-time').textContent;
+
+            // Simple check for recent reports (in production, use actual dates)
+            if (timeText.includes('hours') || timeText.includes('day') || timeText.includes('days')) {
+                if (!reportTypes[type]) {
+                    reportTypes[type] = 0;
+                }
+                reportTypes[type]++;
+            }
+        });
+
+        // Find the most reported type
+        let trendingType = null;
+        let maxCount = 0;
+
+        for (const [type, count] of Object.entries(reportTypes)) {
+            if (count > maxCount) {
+                maxCount = count;
+                trendingType = type;
+            }
+        }
+
+        // Update trending banner
+        if (trendingType && maxCount >= 3) {
+            const trendingContent = document.querySelector('.trending-content');
+            const typeNames = {
+                'scam': 'Scam Alerts',
+                'cyberbullying': 'Cyberbullying Incidents',
+                'hacking': 'Account Hacking',
+                'impersonation': 'Impersonation Cases',
+                'other': 'Other Incidents'
+            };
+
+            trendingContent.querySelector('p').innerHTML = `<strong>${typeNames[trendingType]}</strong> - ${maxCount} reports in the last 7 days`;
+        }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        updateStats();
+        detectTrendingThreats();
+    });
+
+    // Simulate real-time updates (optional)
+    function simulateRealTimeUpdates() {
+        setInterval(() => {
+            // In production, this would check for new reports via API
+            console.log('Checking for new reports...');
+        }, 30000); // Check every 30 seconds
+    }
+
+    // Enable real-time updates
+    // simulateRealTimeUpdates();
+
+    // Export Filters (optional feature for admins)
+    function exportReports() {
+        const visibleReports = [];
+
+        reportCards.forEach(card => {
+            if (card.style.display !== 'none') {
+                const reportData = {
+                    id: card.querySelector('.report-id').textContent,
+                    title: card.querySelector('h3').textContent,
+                    description: card.querySelector('.report-description').textContent,
+                    status: card.getAttribute('data-status'),
+                    type: card.getAttribute('data-type'),
+                    time: card.querySelector('.report-time').textContent,
+                    user: card.querySelector('.report-user').textContent
+                };
+                visibleReports.push(reportData);
+            }
+        });
+
+        console.log('Exporting reports:', visibleReports);
+
+        // In production, convert to CSV and download
+        showNotification(`Exporting ${visibleReports.length} reports...`);
+    }
+
+    // Search Reports (optional feature)
+    function searchReports(query) {
+        query = query.toLowerCase();
+
+        let visibleCount = 0;
+
+        reportCards.forEach(card => {
+            const title = card.querySelector('h3').textContent.toLowerCase();
+            const description = card.querySelector('.report-description').textContent.toLowerCase();
+
+            if (title.includes(query) || description.includes(query)) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (visibleCount === 0) {
+            reportsList.style.display = 'none';
+            submitCta.style.display = 'none';
+            emptyState.style.display = 'block';
+            emptyState.querySelector('p').textContent = `No reports found matching "${query}"`;
+        } else {
+            reportsList.style.display = 'flex';
+            submitCta.style.display = 'block';
+            emptyState.style.display = 'none';
+        }
+    }
+
+    // Report Analytics (optional)
+    function getReportAnalytics() {
+        const analytics = {
+            total: reportCards.length,
+            byStatus: {},
+            byType: {},
+            byPriority: {}
+        };
+
+        reportCards.forEach(card => {
+            const status = card.getAttribute('data-status');
+            const type = card.getAttribute('data-type');
+            const priority = card.querySelector('.badge-high, .badge-medium, .badge-low');
+
+            // Count by status
+            analytics.byStatus[status] = (analytics.byStatus[status] || 0) + 1;
+
+            // Count by type
+            analytics.byType[type] = (analytics.byType[type] || 0) + 1;
+
+            // Count by priority
+            if (priority) {
+                const priorityLevel = priority.textContent.toLowerCase();
+                analytics.byPriority[priorityLevel] = (analytics.byPriority[priorityLevel] || 0) + 1;
+            }
+        });
+
+        return analytics;
+    }
+
+    // Calculate Resolution Rate
+    function getResolutionRate() {
+        const total = reportCards.length;
+        const resolved = document.querySelectorAll('[data-status="resolved"]').length;
+
+        if (total === 0) return 0;
+
+        return Math.round((resolved / total) * 100);
+    }
+
+    // Log analytics on page load (for debugging)
+    console.log('Report Analytics:', getReportAnalytics());
+    console.log('Resolution Rate:', getResolutionRate() + '%');
+</script>
+{% endblock %}

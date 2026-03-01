@@ -2,22 +2,24 @@
 {% block content %}{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CyberSense Hub - Scan</title>
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <!-- Scan CSS -->
     <link rel="stylesheet" href="{% static 'css/scan.css' %}">
-</head> 
+</head>
+
 <body>
     <!-- Top Header -->
     <header class="top-header">
         <div class="header-content">
-            <a href="{% url 'dashboard' %}" class="back-btn">
+            <a href="/dashboard/" class="back-btn">
                 <i class="fa-solid fa-arrow-left"></i>
             </a>
             <div class="logo">
@@ -58,14 +60,10 @@
             <div class="tab-pane active" id="text-tab">
                 <div class="input-section">
                     <label for="text-input">Paste Suspicious Message</label>
-                    <textarea 
-                        id="text-input" 
-                        placeholder="Paste the suspicious email, SMS, or WhatsApp message here...
+                    <textarea id="text-input" placeholder="Paste the suspicious email, SMS, or WhatsApp message here...
                         
 Example:
-'Congratulations! You've won N50,000 scholarship. Send your BVN to claim: bit.ly/xyz123'"
-                        rows="8"
-                    ></textarea>
+'Congratulations! You've won N50,000 scholarship. Send your BVN to claim: bit.ly/xyz123'" rows="8"></textarea>
                     <div class="input-help">
                         <i class="fa-solid fa-circle-info"></i>
                         <span>We analyze the message for scam patterns, urgency tactics, and phishing indicators</span>
@@ -77,12 +75,8 @@ Example:
             <div class="tab-pane" id="link-tab">
                 <div class="input-section">
                     <label for="link-input">Paste Suspicious Link</label>
-                    <input 
-                        type="url" 
-                        id="link-input" 
-                        placeholder="https://example.com/suspicious-link"
-                        class="link-input"
-                    />
+                    <input type="url" id="link-input" placeholder="https://example.com/suspicious-link"
+                        class="link-input" />
                     <div class="input-help">
                         <i class="fa-solid fa-circle-info"></i>
                         <span>We check for phishing URLs, domain spoofing, and malicious patterns</span>
@@ -210,7 +204,8 @@ Example:
                 <div class="safety-tip">
                     <i class="fa-solid fa-shield-check"></i>
                     <p id="safety-tip-text">
-                        <strong>Safety Tip:</strong> Legitimate banks never ask for your BVN, PIN, or password via text message or email.
+                        <strong>Safety Tip:</strong> Legitimate banks never ask for your BVN, PIN, or password via text
+                        message or email.
                     </p>
                 </div>
 
@@ -247,8 +242,6 @@ Example:
         <div class="bottom-spacer"></div>
     </main>
 
-    {%endblock%}
-
     <!-- JavaScript -->
     <script>
         // Tab Switching
@@ -260,7 +253,7 @@ Example:
                 // Remove active class from all tabs
                 tabButtons.forEach(btn => btn.classList.remove('active'));
                 tabPanes.forEach(pane => pane.classList.remove('active'));
-                
+
                 // Add active class to clicked tab
                 button.classList.add('active');
                 const tabId = button.getAttribute('data-tab');
@@ -299,7 +292,7 @@ Example:
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadArea.classList.remove('dragover');
-            
+
             const file = e.dataTransfer.files[0];
             if (file && file.type.startsWith('image/')) {
                 fileInput.files = e.dataTransfer.files;
@@ -333,7 +326,7 @@ Example:
         scanBtn.addEventListener('click', () => {
             // Get current active tab
             const activeTab = document.querySelector('.tab-btn.active').getAttribute('data-tab');
-            
+
             let inputValue = '';
             if (activeTab === 'text') {
                 inputValue = document.getElementById('text-input').value.trim();
@@ -342,51 +335,102 @@ Example:
             } else if (activeTab === 'image') {
                 inputValue = fileInput.files.length > 0 ? 'image-uploaded' : '';
             }
-            
+
             if (!inputValue) {
                 alert('Please enter some content to scan!');
                 return;
             }
-            
+
             // Hide empty state and results
             emptyState.style.display = 'none';
             resultsSection.style.display = 'none';
-            
+
             // Show loading
             loadingState.style.display = 'block';
-            
-            // Simulate scanning (replace with actual API call)
-            setTimeout(() => {
-                displayResults();
-            }, 2000);
+
+            // Call backend API
+            let formData = null;
+            let jsonBody = null;
+            const headers = {};
+
+            if (activeTab === 'image') {
+                formData = new FormData();
+                formData.append('type', 'image');
+                formData.append('image', fileInput.files[0]);
+
+                fetch('/api/scan/', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                            loadingState.style.display = 'none';
+                            emptyState.style.display = 'block';
+                            return;
+                        }
+                        displayResults(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while scanning: ' + error);
+                        loadingState.style.display = 'none';
+                        emptyState.style.display = 'block';
+                    });
+            } else {
+                jsonBody = JSON.stringify({
+                    type: activeTab,
+                    content: inputValue
+                });
+                headers['Content-Type'] = 'application/json';
+
+                fetch('/api/scan/', {
+                    method: 'POST',
+                    headers: headers,
+                    body: jsonBody
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                            loadingState.style.display = 'none';
+                            emptyState.style.display = 'block';
+                            return;
+                        }
+                        displayResults(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while scanning: ' + error);
+                        loadingState.style.display = 'none';
+                        emptyState.style.display = 'block';
+                    });
+            }
         });
 
-        function displayResults() {
+        function displayResults(data) {
             // Hide loading
             loadingState.style.display = 'none';
-            
+
             // Show results
             resultsSection.style.display = 'block';
-            
+
             // Scroll to results
             resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            
-            // Sample data (replace with actual scan results from backend)
-            const riskLevel = 'high'; // high, medium, low
-            const riskScore = 85;
-            
-            updateResultsUI(riskLevel, riskScore);
+
+            updateResultsUI(data.risk_level, data.risk_score, data.patterns, data.recommendations, data.safety_tip);
         }
 
-        function updateResultsUI(riskLevel, riskScore) {
+        function updateResultsUI(riskLevel, riskScore, patterns, recommendations, safetyTip) {
             const riskIcon = document.getElementById('risk-icon');
             const riskBadge = document.getElementById('risk-badge');
             const scoreFill = document.getElementById('score-fill');
             const scoreValue = document.getElementById('score-value');
-            
+
             // Update risk icon
             riskIcon.className = 'risk-icon ' + riskLevel;
-            
+
             // Update risk badge
             riskBadge.className = 'risk-badge ' + riskLevel;
             if (riskLevel === 'high') {
@@ -396,11 +440,49 @@ Example:
             } else {
                 riskBadge.textContent = 'LOW RISK';
             }
-            
+
             // Update score bar
             scoreFill.className = 'score-fill ' + riskLevel;
             scoreFill.style.width = riskScore + '%';
             scoreValue.textContent = riskScore + '/100';
+
+            // Patterns
+            const patternsList = document.getElementById('patterns-list');
+            patternsList.innerHTML = '';
+            if (patterns && patterns.length > 0) {
+                patterns.forEach(p => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fa-solid fa-${riskLevel === 'low' ? 'circle-info' : 'circle-xmark'}"></i>
+                                    <span><strong>${p.title}:</strong> ${p.desc}</span>`;
+                    patternsList.appendChild(li);
+                });
+            } else {
+                patternsList.innerHTML = '<li><i class="fa-solid fa-circle-info"></i><span>No visible threat patterns detected.</span></li>';
+            }
+
+            // Recommendations
+            const recommendationsList = document.getElementById('recommendations-list');
+            recommendationsList.innerHTML = '';
+            if (recommendations && recommendations.length > 0) {
+                recommendations.forEach(r => {
+                    const li = document.createElement('li');
+                    let innerHTML = `<i class="fa-solid fa-${riskLevel === 'high' ? 'exclamation-triangle' : 'check-circle'}"></i>`;
+                    if (r.title) {
+                        innerHTML += `<span><strong>${r.title}:</strong> ${r.desc}</span>`;
+                    } else {
+                        innerHTML += `<span>${r.desc}</span>`;
+                    }
+                    li.innerHTML = innerHTML;
+                    recommendationsList.appendChild(li);
+                });
+            } else {
+                recommendationsList.innerHTML = '<li><i class="fa-solid fa-check-circle"></i><span>Stay safe.</span></li>';
+            }
+
+            // Safety Tip
+            if (safetyTip) {
+                document.getElementById('safety-tip-text').innerHTML = `<strong>Safety Tip:</strong> ${safetyTip}`;
+            }
         }
 
         // Scan Again Button
@@ -412,11 +494,11 @@ Example:
             if (fileInput.files.length > 0) {
                 removeImageBtn.click();
             }
-            
+
             // Hide results
             resultsSection.style.display = 'none';
             emptyState.style.display = 'block';
-            
+
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
@@ -428,5 +510,4 @@ Example:
             alert('Scan saved to history!');
         });
     </script>
-</body>
-</html>
+    {% endblock %}

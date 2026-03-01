@@ -1,0 +1,562 @@
+{% extends 'core/base.html' %}
+{% block content %}{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSense Hub - Scan History</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- History CSS -->
+    <link rel="stylesheet" href="{% static 'css/history.css' %}">
+</head>
+
+<body>
+    <!-- Top Header -->
+    <header class="top-header">
+        <div class="header-content">
+            <a href="../Core/dashboard.html" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            <div class="logo">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h1>Cyber<span>Sense</span> HUB</h1>
+            </div>
+            <div class="header-right">
+                <button class="filter-btn" id="filter-btn">
+                    <i class="fa-solid fa-filter"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="history-container">
+        <!-- Page Title -->
+        <div class="page-title">
+            <h2>Scan History</h2>
+            <p>View all your previous scans</p>
+        </div>
+
+        <!-- Summary Stats -->
+        <div class="summary-stats">
+            <div class="summary-item">
+                <div class="summary-icon">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div class="summary-details">
+                    <div class="summary-number">47</div>
+                    <div class="summary-label">Total Scans</div>
+                </div>
+            </div>
+
+            <div class="summary-item">
+                <div class="summary-icon red">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div class="summary-details">
+                    <div class="summary-number">12</div>
+                    <div class="summary-label">High Risk</div>
+                </div>
+            </div>
+
+            <div class="summary-item">
+                <div class="summary-icon green">
+                    <i class="fa-solid fa-check-circle"></i>
+                </div>
+                <div class="summary-details">
+                    <div class="summary-number">28</div>
+                    <div class="summary-label">Safe</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Panel (Hidden by default) -->
+        <div class="filter-panel" id="filter-panel">
+            <div class="filter-header">
+                <h3>Filter Scans</h3>
+                <button class="close-filter" id="close-filter">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="filter-group">
+                <label>Scan Type</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="message" checked>
+                        <span>Text Messages</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="link" checked>
+                        <span>Links/URLs</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="image" checked>
+                        <span>Images</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>Risk Level</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="high" checked>
+                        <span>High Risk</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="medium" checked>
+                        <span>Medium Risk</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="low" checked>
+                        <span>Low Risk</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>Date Range</label>
+                <select class="date-range-select">
+                    <option value="all">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="week">Last 7 Days</option>
+                    <option value="month">Last 30 Days</option>
+                    <option value="custom">Custom Range</option>
+                </select>
+            </div>
+
+            <div class="filter-actions">
+                <button class="btn-clear">Clear All</button>
+                <button class="btn-apply">Apply Filters</button>
+            </div>
+        </div>
+
+        <!-- Scan History List -->
+        <div class="history-list">
+            {% for scan in scans %}
+            <div class="history-card" data-type="{{ scan.scan_type }}" data-risk="{{ scan.risk_level }}">
+                <div class="history-header">
+                    <div class="scan-type-icon {{ scan.scan_type }}">
+                        <i
+                            class="fa-solid {% if scan.scan_type == 'image' %}fa-file-image{% elif scan.scan_type == 'link' %}fa-link{% else %}fa-message{% endif %}"></i>
+                    </div>
+                    <div class="history-main">
+                        <h3>{% if scan.patterns and scan.patterns.0 %}{{ scan.patterns.0.title }}{% else %}Scan
+                            Assessment{% endif %}</h3>
+                        <p class="history-preview">Status: {{ scan.risk_level|title }} Risk (Score: {{ scan.risk_score
+                            }})</p>
+                        <div class="history-meta">
+                            <span class="scan-date"><i class="fa-solid fa-clock"></i> {{ scan.created_at|timesince }}
+                                ago</span>
+                            <span class="scan-id">#SC-{{ scan.id }}</span>
+                        </div>
+                    </div>
+                    <div class="risk-badge {{ scan.risk_level }}">
+                        <i
+                            class="fa-solid {% if scan.risk_level == 'high' %}fa-shield-halved{% elif scan.risk_level == 'medium' %}fa-triangle-exclamation{% else %}fa-check-circle{% endif %}"></i>
+                        <span>{{ scan.risk_level|upper }}</span>
+                    </div>
+                </div>
+                <div class="history-footer">
+                    <button class="btn-view" onclick="viewScanDetails('{{ scan.id }}')">
+                        <i class="fa-solid fa-eye"></i> View Details
+                    </button>
+                    <button class="btn-delete" onclick="deleteScan('{{ scan.id }}')">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            {% empty %}
+            <p style="padding: 1rem; color: #a1a1aa; font-size: 0.9rem;">No scan history found. Run your first scan to
+                see history here!</p>
+            {% endfor %}
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more-section">
+            <button class="btn-load-more" id="load-more-btn">
+                <i class="fa-solid fa-rotate"></i> Load More
+            </button>
+        </div>
+
+        <!-- Empty State (Hidden by default) -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <h3>No Scan History</h3>
+            <p>You haven't performed any scans yet</p>
+            <button class="btn-primary" onclick="location.href='../Core/scan.html'">
+                <i class="fa-solid fa-magnifying-glass"></i> Start Scanning
+            </button>
+        </div>
+
+        <!-- Scan Details Modal -->
+        <div id="scan-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Scan Details</h2>
+                    <button class="btn-close-modal" onclick="closeModal()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body-content">
+                    <!-- Populated via Javascript -->
+                    <div class="loading-spinner">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i> Loading...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Spacer -->
+        <div class="bottom-spacer"></div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="../Core/dashboard.html" class="nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="../Core/scan.html" class="nav-item">
+            <i class="fa-solid fa-file"></i>
+            <span>Scan</span>
+        </a>
+        <a href="../Core/web-protection.html" class="nav-item">
+            <i class="fa-solid fa-globe"></i>
+            <span>Web</span>
+        </a>
+        <a href="../Core/alerts.html" class="nav-item">
+            <i class="fa-solid fa-bell"></i>
+            <span>Alerts</span>
+        </a>
+        <a href="../Core/menu.html" class="nav-item">
+            <i class="fa-solid fa-bars"></i>
+            <span>Menu</span>
+        </a>
+    </nav>
+
+    <!-- JavaScript -->
+    <script>
+        // Filter Panel Toggle
+        const filterBtn = document.getElementById('filter-btn');
+        const filterPanel = document.getElementById('filter-panel');
+        const closeFilter = document.getElementById('close-filter');
+
+        filterBtn.addEventListener('click', () => {
+            filterPanel.classList.toggle('active');
+        });
+
+        closeFilter.addEventListener('click', () => {
+            filterPanel.classList.remove('active');
+        });
+
+        // Apply Filters
+        const applyBtn = document.querySelector('.btn-apply');
+        const clearBtn = document.querySelector('.btn-clear');
+        const historyCards = document.querySelectorAll('.history-card');
+
+        applyBtn.addEventListener('click', () => {
+            applyFilters();
+            filterPanel.classList.remove('active');
+        });
+
+        clearBtn.addEventListener('click', () => {
+            // Uncheck all checkboxes
+            document.querySelectorAll('.checkbox-item input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = true;
+            });
+
+            // Reset date range
+            document.querySelector('.date-range-select').value = 'all';
+
+            // Show all cards
+            historyCards.forEach(card => {
+                card.style.display = 'block';
+            });
+        });
+
+        function applyFilters() {
+            // Get selected types
+            const selectedTypes = [];
+            document.querySelectorAll('.checkbox-item input[value="message"]:checked, .checkbox-item input[value="link"]:checked, .checkbox-item input[value="image"]:checked').forEach(checkbox => {
+                selectedTypes.push(checkbox.value);
+            });
+
+            // Get selected risk levels
+            const selectedRisks = [];
+            document.querySelectorAll('.checkbox-item input[value="high"]:checked, .checkbox-item input[value="medium"]:checked, .checkbox-item input[value="low"]:checked').forEach(checkbox => {
+                selectedRisks.push(checkbox.value);
+            });
+
+            // Filter cards
+            let visibleCount = 0;
+            historyCards.forEach(card => {
+                const type = card.getAttribute('data-type');
+                const risk = card.getAttribute('data-risk');
+
+                if (selectedTypes.includes(type) && selectedRisks.includes(risk)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Show empty state if no results
+            const emptyState = document.getElementById('empty-state');
+            const historyList = document.querySelector('.history-list');
+            const loadMoreSection = document.querySelector('.load-more-section');
+
+            if (visibleCount === 0) {
+                historyList.style.display = 'none';
+                loadMoreSection.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                historyList.style.display = 'flex';
+                loadMoreSection.style.display = 'block';
+                emptyState.style.display = 'none';
+            }
+        }
+
+        // View Scan Details
+        async function viewScanDetails(scanId) {
+            const modal = document.getElementById('scan-modal');
+            const modalContent = document.getElementById('modal-body-content');
+
+            // Show modal and loading state
+            modal.style.display = 'flex';
+            modalContent.innerHTML = '<div class="loading-spinner" style="text-align:center; padding: 2rem;"><i class="fa-solid fa-circle-notch fa-spin fa-2x"></i><p style="margin-top:1rem;">Loading details...</p></div>';
+
+            try {
+                const response = await fetch(`/api/scan_details/${scanId}/`);
+                const result = await response.json();
+
+                if (response.ok && result.status === 'success') {
+                    const data = result.data;
+                    let patternsHtml = '';
+
+                    if (data.patterns && data.patterns.length > 0) {
+                        patternsHtml = data.patterns.map(p => `
+                            <div class="pattern-item" style="background:var(--card-bg); padding:1rem; border-radius:8px; margin-bottom:1rem;">
+                                <h4 style="color:var(--text-main); margin-bottom:0.5rem;"><i class="fa-solid fa-triangle-exclamation"></i> ${p.title}</h4>
+                                <p style="color:var(--text-muted); font-size:0.9rem;">${p.desc}</p>
+                            </div>
+                        `).join('');
+                    } else {
+                        patternsHtml = '<p style="color:var(--text-muted);">No specific threat patterns detected.</p>';
+                    }
+
+                    // Map risk level to colors
+                    const riskColors = {
+                        'high': '#EF4444',
+                        'medium': '#F59E0B',
+                        'low': '#00D084'
+                    };
+                    const color = riskColors[data.risk_level] || '#00D084';
+
+                    modalContent.innerHTML = `
+                        <div class="modal-detail-grid" style="display:grid; gap:1.5rem;">
+                            <div class="detail-header" style="border-bottom:1px solid var(--border-color); padding-bottom:1rem;">
+                                <h3 style="color:${color}; font-size:1.4rem; margin-bottom:0.5rem;">
+                                    ${data.risk_level.toUpperCase()} RISK (${data.risk_score}/100)
+                                </h3>
+                                <div style="display:flex; justify-content:space-between; color:var(--text-muted); font-size:0.9rem;">
+                                    <span><i class="fa-solid fa-tag"></i> Type: ${data.scan_type.toUpperCase()}</span>
+                                    <span><i class="fa-solid fa-clock"></i> ${data.created_at}</span>
+                                </div>
+                            </div>
+                            <div class="detail-patterns">
+                                <h3 style="color:var(--text-main); margin-bottom:1rem;">Detected Patterns</h3>
+                                ${patternsHtml}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    modalContent.innerHTML = `<p style="color:#EF4444; text-align:center; padding:2rem;">Error: ${result.error || 'Failed to load scan details.'}</p>`;
+                }
+            } catch (error) {
+                console.error("Error fetching details:", error);
+                modalContent.innerHTML = `<p style="color:#EF4444; text-align:center; padding:2rem;">Server error. Ensure you are connected to the network.</p>`;
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('scan-modal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside of it
+        document.getElementById('scan-modal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Delete Scan
+        function deleteScan(scanId) {
+            if (confirm(`Are you sure you want to delete scan ${scanId}? This action cannot be undone.`)) {
+                // Find and remove the card
+                const card = document.querySelector(`[onclick*="${scanId}"]`).closest('.history-card');
+
+                card.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    card.remove();
+
+                    // Update counts
+                    updateCounts();
+
+                    // Check if empty
+                    if (document.querySelectorAll('.history-card').length === 0) {
+                        document.querySelector('.history-list').style.display = 'none';
+                        document.querySelector('.load-more-section').style.display = 'none';
+                        document.getElementById('empty-state').style.display = 'block';
+                    }
+                }, 300);
+
+                showNotification('Scan deleted successfully!');
+            }
+        }
+
+        // Update Summary Counts
+        function updateCounts() {
+            const totalScans = document.querySelectorAll('.history-card').length;
+            const highRisk = document.querySelectorAll('.history-card[data-risk="high"]').length;
+            const lowRisk = document.querySelectorAll('.history-card[data-risk="low"]').length;
+
+            document.querySelectorAll('.summary-number')[0].textContent = totalScans;
+            document.querySelectorAll('.summary-number')[1].textContent = highRisk;
+            document.querySelectorAll('.summary-number')[2].textContent = lowRisk;
+        }
+
+        // Initialize counts on page load
+        document.addEventListener('DOMContentLoaded', updateCounts);
+
+        // Load More
+        const loadMoreBtn = document.getElementById('load-more-btn');
+
+        loadMoreBtn.addEventListener('click', () => {
+            // TODO: Fetch more scans from backend
+            loadMoreBtn.textContent = 'Loading...';
+            loadMoreBtn.disabled = true;
+
+            setTimeout(() => {
+                alert('No more scans to load!');
+                loadMoreBtn.textContent = 'Load More';
+                loadMoreBtn.disabled = false;
+            }, 1000);
+        });
+
+        // Show Notification
+        function showNotification(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: #00D084;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            
+            /* Modal Styles */
+            .modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(5px);
+                z-index: 2000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.2s ease;
+            }
+            
+            .modal-content {
+                background: #1e1e24; /* match theme */
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 16px;
+                width: 90%;
+                max-width: 500px;
+                max-height: 80vh;
+                overflow-y: auto;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1.5rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .modal-header h2 {
+                color: #ffffff;
+                font-size: 1.2rem;
+                margin: 0;
+            }
+            
+            .btn-close-modal {
+                background: none;
+                border: none;
+                color: #a1a1aa;
+                font-size: 1.2rem;
+                cursor: pointer;
+                transition: color 0.2s;
+            }
+            
+            .btn-close-modal:hover {
+                color: #EF4444;
+            }
+            
+            .modal-body {
+                padding: 1.5rem;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    </script>
+</body>
+
+</html>
+{% endblock %}

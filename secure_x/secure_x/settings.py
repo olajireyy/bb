@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'accounts',
+    'core',
+
 ]
 
 MIDDLEWARE = [
@@ -132,3 +134,5 @@ LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 # Email backend (console for development — configure SMTP for production)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+GEMINI_API_KEY = "AIzaSyDsgyHcXrYhMg-ZVLXseG_SvPom-sfX0KQ"

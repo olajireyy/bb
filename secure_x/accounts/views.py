@@ -138,17 +138,3 @@ def reset_password_view(request, uidb64, token):
         return render(request, 'authentication/reset-password.html', {'valid_link': False})
 
 
-def home(request):
-    return render(request, 'core/dashboard.html', {'active_page': 'dashboard'})
-
-def menu(request):
-    return render(request, 'core/menu.html', {'active_page': 'menu'})
-
-def scan(request):
-    return render(request, 'core/scan.html', {'active_page': 'scan'})
-
-def web_protection(request):
-    return render(request, 'core/web-protection.html', {'active_page': 'web'})
-
-def alerts(request):
-    return render(request, 'core/alerts.html', {'active_page': 'alerts'})  

@@ -1,0 +1,587 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSense Hub - Help Center</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Help CSS -->
+    <link rel="stylesheet" href="{% static 'css/help.css' %}">
+</head>
+
+<!-- Top Header -->
+<header class="top-header">
+    <div class="header-content">
+        <a href="/menu/" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h1>Cyber<span>Sense</span> HUB</h1>
+        </div>
+        <div class="header-spacer"></div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="help-container">
+    <!-- Page Title -->
+    <div class="page-title">
+        <h2>Help Center</h2>
+        <p>Find answers and get support</p>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-section">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search-input" placeholder="Search for help...">
+        </div>
+    </div>
+
+    <!-- Quick Help Cards -->
+    <div class="quick-help-section">
+        <h3>Quick Help</h3>
+        <div class="quick-help-grid">
+            <a href="#getting-started" class="help-card">
+                <i class="fa-solid fa-rocket"></i>
+                <h4>Getting Started</h4>
+                <p>Learn the basics</p>
+            </a>
+
+            <a href="#scanning" class="help-card">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <h4>How to Scan</h4>
+                <p>Detect threats</p>
+            </a>
+
+            <a href="#verification" class="help-card">
+                <i class="fa-solid fa-shield-check"></i>
+                <h4>Payment Verification</h4>
+                <p>Verify bank alerts</p>
+            </a>
+
+            <a href="#reporting" class="help-card">
+                <i class="fa-solid fa-flag"></i>
+                <h4>Submit Reports</h4>
+                <p>Report incidents</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- FAQs -->
+    <div class="faq-section">
+        <h3>Frequently Asked Questions</h3>
+
+        <!-- Getting Started -->
+        <div class="faq-category" id="getting-started">
+            <h4><i class="fa-solid fa-rocket"></i> Getting Started</h4>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What is CyberSense Hub?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>CyberSense Hub is a cybersecurity platform designed to protect Nigerian students, small
+                        businesses, and campus communities from online scams, fraud, and cyber threats. We use
+                        AI-powered detection to analyze suspicious messages, links, and payment alerts in real-time.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I create an account?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>1. Click "Get Started" or "Sign Up" on the login page<br>
+                        2. Enter your name, email, and phone number<br>
+                        3. Create a strong password<br>
+                        4. Select your user type (Student, Business Owner, or Institution)<br>
+                        5. Click "Sign Up" to complete registration</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Is CyberSense Hub free to use?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! CyberSense Hub is completely free for students and campus communities. We offer basic
+                        features at no cost. Premium features for businesses may be available in the future.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scanning -->
+        <div class="faq-category" id="scanning">
+            <h4><i class="fa-solid fa-magnifying-glass"></i> Scanning & Detection</h4>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I scan a suspicious message?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>1. Go to the Scan page<br>
+                        2. Select the "Text" tab<br>
+                        3. Copy and paste the suspicious message<br>
+                        4. Click "Scan Now"<br>
+                        5. Review the results and risk level</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What types of threats can CyberSense Hub detect?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We detect multiple threat types including:<br>
+                        • Phishing emails and messages<br>
+                        • Fake scholarship scams<br>
+                        • Fraudulent job offers<br>
+                        • Investment scams (Forex, MMM, etc.)<br>
+                        • Fake bank transfer alerts<br>
+                        • Malicious URLs and links<br>
+                        • Impersonation attempts<br>
+                        • Data harvesting schemes</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How accurate is the threat detection?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Our detection system uses pattern matching algorithms specifically trained on Nigerian scam
+                        patterns. While highly accurate, we recommend treating all high-risk alerts seriously and
+                        verifying through official channels when in doubt.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Can I scan images?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! You can upload screenshots of suspicious messages or bank alerts. Our OCR (Optical Character
+                        Recognition) technology extracts text from images and analyzes them for threats.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Verification -->
+        <div class="faq-category" id="verification">
+            <h4><i class="fa-solid fa-shield-check"></i> Payment Verification</h4>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I verify a bank alert?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>1. Go to "Verify Payment" from the dashboard<br>
+                        2. Upload a screenshot of the bank alert<br>
+                        3. Click "Verify Payment"<br>
+                        4. Wait for OCR analysis<br>
+                        5. Review the verification results</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What makes a bank alert fake?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Red flags include:<br>
+                        • Wrong or missing bank name<br>
+                        • Inconsistent font styling<br>
+                        • Missing transaction reference<br>
+                        • Unusual timestamp format<br>
+                        • Poor image quality or editing signs<br>
+                        • Spelling/grammar errors</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Should I release goods after verification?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Always verify through multiple channels:<br>
+                        1. Check our verification results<br>
+                        2. Call your bank directly to confirm<br>
+                        3. Check your actual account balance<br>
+                        4. Never rely on screenshots alone</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reporting -->
+        <div class="faq-category" id="reporting">
+            <h4><i class="fa-solid fa-flag"></i> Reporting & Campus Safety</h4>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I report a security incident?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>1. Go to Campus Reports<br>
+                        2. Click "Submit New Report"<br>
+                        3. Fill in incident details<br>
+                        4. Upload evidence (optional)<br>
+                        5. Submit anonymously or with your name<br>
+                        6. Click "Submit Report"</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Can I report anonymously?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! You can check the "Submit anonymously" option when filing a report. Your identity will not
+                        be recorded or shared with anyone.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What happens after I submit a report?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>1. Report is immediately logged<br>
+                        2. Security team reviews within 24 hours<br>
+                        3. Investigation begins if needed<br>
+                        4. Campus community may be alerted<br>
+                        5. You receive updates (if not anonymous)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account & Settings -->
+        <div class="faq-category">
+            <h4><i class="fa-solid fa-gear"></i> Account & Settings</h4>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I change my password?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>1. Go to Settings from the menu<br>
+                        2. Click "Change Password" in Security section<br>
+                        3. Enter current password<br>
+                        4. Enter new password (min 8 characters)<br>
+                        5. Confirm new password<br>
+                        6. Click "Update Password"</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I delete my account?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>1. Go to Settings<br>
+                        2. Scroll to "Data & Storage"<br>
+                        3. Click "Delete Account"<br>
+                        4. Confirm by typing "DELETE"<br>
+                        Note: This action is permanent and cannot be undone!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Support -->
+    <div class="contact-section">
+        <div class="contact-card">
+            <i class="fa-solid fa-headset"></i>
+            <h3>Still Need Help?</h3>
+            <p>Our support team is here to assist you</p>
+            <div class="contact-methods">
+                <a href="mailto:support@cybersensehub.com" class="contact-btn">
+                    <i class="fa-solid fa-envelope"></i> Email Support
+                </a>
+                <a href="tel:+2348001234567" class="contact-btn">
+                    <i class="fa-solid fa-phone"></i> Call Us
+                </a>
+            </div>
+            <p class="contact-hours">Available Monday - Friday, 9AM - 5PM WAT</p>
+        </div>
+    </div>
+
+    <div class="bottom-spacer"></div>
+</main>
+
+<!-- JavaScript -->
+<script>
+    // FAQ Toggle
+    function toggleFAQ(element) {
+        const faqItem = element.parentElement;
+        const allFaqItems = document.querySelectorAll('.faq-item');
+
+        // Close all other FAQs
+        allFaqItems.forEach(item => {
+            if (item !== faqItem && item.classList.contains('active')) {
+                item.classList.remove('active');
+            }
+        });
+
+        // Toggle current FAQ
+        faqItem.classList.toggle('active');
+    }
+
+    // Search Functionality
+    const searchInput = document.getElementById('search-input');
+    const faqItems = document.querySelectorAll('.faq-item');
+    const faqCategories = document.querySelectorAll('.faq-category');
+
+    searchInput.addEventListener('input', function () {
+        const searchTerm = this.value.toLowerCase();
+
+        if (searchTerm === '') {
+            // Show all FAQs
+            faqItems.forEach(item => {
+                item.style.display = 'block';
+            });
+            faqCategories.forEach(category => {
+                category.style.display = 'block';
+            });
+            return;
+        }
+
+        let hasResults = false;
+
+        faqCategories.forEach(category => {
+            let categoryHasResults = false;
+            const categoryFaqItems = category.querySelectorAll('.faq-item');
+
+            categoryFaqItems.forEach(item => {
+                const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer p').textContent.toLowerCase();
+
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                    categoryHasResults = true;
+                    hasResults = true;
+
+                    // Auto-open matching FAQs
+                    if (!item.classList.contains('active')) {
+                        item.classList.add('active');
+                    }
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Show/hide category based on results
+            if (categoryHasResults) {
+                category.style.display = 'block';
+            } else {
+                category.style.display = 'none';
+            }
+        });
+
+        // Show no results message
+        if (!hasResults) {
+            showNoResults();
+        } else {
+            hideNoResults();
+        }
+    });
+
+    // Show No Results Message
+    function showNoResults() {
+        let noResultsMsg = document.getElementById('no-results');
+
+        if (!noResultsMsg) {
+            noResultsMsg = document.createElement('div');
+            noResultsMsg.id = 'no-results';
+            noResultsMsg.style.cssText = `
+                    background: white;
+                    border-radius: 12px;
+                    padding: 40px;
+                    text-align: center;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                    margin: 20px 0;
+                `;
+            noResultsMsg.innerHTML = `
+                    <i class="fa-solid fa-magnifying-glass" style="font-size: 48px; color: #e0e0e0; margin-bottom: 16px;"></i>
+                    <h3 style="color: #2f077d; margin-bottom: 8px;">No results found</h3>
+                    <p style="color: #666;">Try searching with different keywords or browse the categories above</p>
+                `;
+
+            document.querySelector('.faq-section').appendChild(noResultsMsg);
+        }
+
+        noResultsMsg.style.display = 'block';
+    }
+
+    // Hide No Results Message
+    function hideNoResults() {
+        const noResultsMsg = document.getElementById('no-results');
+        if (noResultsMsg) {
+            noResultsMsg.style.display = 'none';
+        }
+    }
+
+    // Smooth Scroll to Section
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+
+            if (target) {
+                const headerOffset = 80;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+
+                // Highlight the section briefly
+                target.style.animation = 'highlight 1s ease';
+                setTimeout(() => {
+                    target.style.animation = '';
+                }, 1000);
+            }
+        });
+    });
+
+    // Add highlight animation
+    const style = document.createElement('style');
+    style.textContent = `
+            @keyframes highlight {
+                0%, 100% {
+                    background: white;
+                }
+                50% {
+                    background: #E3F2FD;
+                }
+            }
+        `;
+    document.head.appendChild(style);
+
+    // Track Popular Questions
+    const popularQuestions = {};
+
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', function () {
+            const questionText = this.querySelector('span').textContent;
+
+            if (!popularQuestions[questionText]) {
+                popularQuestions[questionText] = 0;
+            }
+            popularQuestions[questionText]++;
+
+            console.log('Popular Questions:', popularQuestions);
+            // TODO: Send to analytics
+        });
+    });
+
+    // Quick Help Card Click Tracking
+    document.querySelectorAll('.help-card').forEach(card => {
+        card.addEventListener('click', function (e) {
+            const cardTitle = this.querySelector('h4').textContent;
+            console.log('Quick Help Card Clicked:', cardTitle);
+            // TODO: Send to analytics
+        });
+    });
+
+    // Contact Button Click Tracking
+    document.querySelectorAll('.contact-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const method = this.textContent.trim();
+            console.log('Contact Method:', method);
+            // TODO: Send to analytics
+        });
+    });
+
+    // Show notification for copied links
+    function showNotification(message) {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: #00D084;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                font-size: 14px;
+                font-weight: 600;
+            `;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // Add slide animations
+    const animStyle = document.createElement('style');
+    animStyle.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+    document.head.appendChild(animStyle);
+
+    // Log page view
+    console.log('Help Center loaded');
+
+    // Check if user came from a specific section
+    window.addEventListener('load', () => {
+        if (window.location.hash) {
+            const section = document.querySelector(window.location.hash);
+            if (section) {
+                setTimeout(() => {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        }
+    });
+</script>
+{% endblock %}

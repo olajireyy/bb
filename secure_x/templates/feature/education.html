@@ -1,0 +1,170 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSense Hub - Security Education</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Education CSS -->
+    <link rel="stylesheet" href="{% static 'css/education.css' %}">
+</head>
+
+<!-- Top Header -->
+<header class="top-header">
+    <div class="header-content">
+        <a href="/menu/" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h1>Cyber<span>Sense</span> HUB</h1>
+        </div>
+        <div class="header-spacer"></div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="education-container">
+    <!-- Page Title -->
+    <div class="page-title">
+        <h2>Security Education</h2>
+        <p>Learn about common scams and how to protect yourself</p>
+    </div>
+
+    <!-- Quick Tips -->
+    <div class="quick-tips-banner">
+        <h3><i class="fa-solid fa-lightbulb"></i> Golden Rules</h3>
+        <ul>
+            <li>Never share your BVN, PIN, or password via text or email</li>
+            <li>Verify payment alerts through your bank's official app or USSD</li>
+            <li>Legitimate scholarships never ask for upfront fees</li>
+            <li>If it sounds too good to be true, it probably is</li>
+        </ul>
+    </div>
+
+    <!-- Fake Scholarship Scams -->
+    <div class="scam-category">
+        <h3><i class="fa-solid fa-graduation-cap"></i> Fake Scholarship Scams</h3>
+        <p>Scammers target students with fake NELFUND, university, or government scholarship offers. They often request
+            BVN, bank details, or "processing fees" to "claim" the scholarship.</p>
+        <div class="warning-signs">
+            <h4>Warning Signs</h4>
+            <ul>
+                <li>Urgent messages claiming limited spots</li>
+                <li>Requests for BVN or bank account details</li>
+                <li>Links to unofficial websites (check the URL)</li>
+                <li>Asking for "registration" or "processing" fees</li>
+            </ul>
+        </div>
+        <ul class="tips-list">
+            <li>Apply only through official NELFUND or university portals</li>
+            <li>Never pay to receive a scholarship</li>
+            <li>Verify any scholarship offer by contacting the institution directly</li>
+        </ul>
+    </div>
+
+    <!-- Fake Payment Alerts -->
+    <div class="scam-category">
+        <h3><i class="fa-solid fa-file-invoice-dollar"></i> Fake Bank Transfer Alerts</h3>
+        <p>Fraudsters create fake bank alert screenshots to trick vendors into releasing goods or services without
+            actual payment. They often target small businesses and marketplace sellers.</p>
+        <div class="warning-signs">
+            <h4>Warning Signs</h4>
+            <ul>
+                <li>Customer insists on screenshot instead of showing bank app</li>
+                <li>Inconsistent fonts or formatting in the alert</li>
+                <li>Missing or unusual transaction reference</li>
+                <li>Pressure to release goods before "confirming"</li>
+            </ul>
+        </div>
+        <ul class="tips-list">
+            <li>Always verify through your bank's official app or USSD</li>
+            <li>Check your actual account balance before releasing goods</li>
+            <li>Use our Payment Verification tool to analyze suspicious alerts</li>
+        </ul>
+    </div>
+
+    <!-- Phishing -->
+    <div class="scam-category">
+        <h3><i class="fa-solid fa-envelope"></i> Phishing Emails & Messages</h3>
+        <p>Scammers send fake emails or SMS pretending to be banks, government agencies, or trusted companies. They aim
+            to steal your login credentials, personal data, or money.</p>
+        <div class="warning-signs">
+            <h4>Warning Signs</h4>
+            <ul>
+                <li>Urgent language ("Act now! Account suspended!")</li>
+                <li>Generic greetings ("Dear Customer" instead of your name)</li>
+                <li>Links to suspicious or misspelled URLs</li>
+                <li>Requests for sensitive data (BVN, PIN, OTP)</li>
+            </ul>
+        </div>
+        <ul class="tips-list">
+            <li>Never click links in emails—type the URL directly in your browser</li>
+            <li>Banks never ask for BVN, PIN, or OTP via email or SMS</li>
+            <li>Scan suspicious messages with our Text Scanner before responding</li>
+        </ul>
+    </div>
+
+    <!-- Job Scams -->
+    <div class="scam-category">
+        <h3><i class="fa-solid fa-briefcase"></i> Fake Job Offers</h3>
+        <p>Fake job postings promise high salaries with minimal work. They often request "registration fees," "training
+            costs," or personal documents before the "job" starts.</p>
+        <div class="warning-signs">
+            <h4>Warning Signs</h4>
+            <ul>
+                <li>Job offer without a proper interview</li>
+                <li>Request for upfront payment before "employment"</li>
+                <li>Contact only via WhatsApp or email, no official company address</li>
+                <li>Too-good-to-be-true salary for minimal qualifications</li>
+            </ul>
+        </div>
+        <ul class="tips-list">
+            <li>Research the company before applying</li>
+            <li>Legitimate employers never ask for payment to hire you</li>
+            <li>Verify job offers through the company's official website</li>
+        </ul>
+    </div>
+
+    <!-- Investment Fraud -->
+    <div class="scam-category">
+        <h3><i class="fa-solid fa-chart-line"></i> Investment & Forex Scams</h3>
+        <p>Pyramid schemes, fake Forex platforms, and "investment opportunities" promise high returns. They often use
+            social proof and urgency to pressure victims into investing.</p>
+        <div class="warning-signs">
+            <h4>Warning Signs</h4>
+            <ul>
+                <li>Guaranteed returns or "risk-free" investments</li>
+                <li>Pressure to invest quickly</li>
+                <li>Unregistered or unlicensed platforms</li>
+                <li>Difficulty withdrawing your money</li>
+            </ul>
+        </div>
+        <ul class="tips-list">
+            <li>Check if investment platforms are registered with SEC</li>
+            <li>Be skeptical of guaranteed returns</li>
+            <li>Never invest more than you can afford to lose</li>
+        </ul>
+    </div>
+
+    <!-- CTA -->
+    <div class="scam-category"
+        style="text-align: center; background: linear-gradient(135deg, #2f077d 0%, #007BFF 100%); color: white;">
+        <h3 style="color: white;"><i class="fa-solid fa-shield-halved"></i> Stay Protected</h3>
+        <p style="color: rgba(255,255,255,0.9);">Use our Scan and Verify Payment tools to check suspicious content
+            before taking action.</p>
+        <a href="/scan/"
+            style="display: inline-block; margin-top: 16px; padding: 12px 24px; background: white; color: #2f077d; border-radius: 8px; text-decoration: none; font-weight: 600;">Scan
+            Now</a>
+    </div>
+
+    <!-- Bottom Spacer -->
+    <div class="bottom-spacer"></div>
+</main>
+
+{% endblock %}

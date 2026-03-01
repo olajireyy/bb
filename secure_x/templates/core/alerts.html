@@ -3,22 +3,24 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CyberSense Hub - Alert</title>
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <!-- Alerts CSS -->
     <link rel="stylesheet" href="{%static 'css/alerts.css' %}">
 </head>
+
 <body>
     <!-- Top Header -->
     <header class="top-header">
         <div class="header-content">
-            <a href="{% url 'dashboard' %}" class="back-btn">
+            <a href="/dashboard" class="back-btn">
                 <i class="fa-solid fa-arrow-left"></i>
             </a>
             <div class="logo">
@@ -116,7 +118,8 @@
                                 <span class="badge badge-high">High</span>
                             </div>
                         </div>
-                        <p class="alert-description">Suspicious email from fake-nelfund@gmail.com attempting to collect BVN information</p>
+                        <p class="alert-description">Suspicious email from fake-nelfund@gmail.com attempting to collect
+                            BVN information</p>
                         <div class="alert-meta">
                             <span class="alert-time"><i class="fa-solid fa-clock"></i> 2 hours ago</span>
                             <span class="alert-type"><i class="fa-solid fa-tag"></i> Phishing</span>
@@ -145,7 +148,8 @@
                                 <span class="badge badge-high">High</span>
                             </div>
                         </div>
-                        <p class="alert-description">Blocked access to phishing-gtbank.xyz - Domain impersonating GTBank</p>
+                        <p class="alert-description">Blocked access to phishing-gtbank.xyz - Domain impersonating GTBank
+                        </p>
                         <div class="alert-meta">
                             <span class="alert-time"><i class="fa-solid fa-clock"></i> 5 hours ago</span>
                             <span class="alert-type"><i class="fa-solid fa-tag"></i> Malicious URL</span>
@@ -174,7 +178,8 @@
                                 <span class="badge badge-medium">Medium</span>
                             </div>
                         </div>
-                        <p class="alert-description">Detected forex trading scam message promising guaranteed 500% returns</p>
+                        <p class="alert-description">Detected forex trading scam message promising guaranteed 500%
+                            returns</p>
                         <div class="alert-meta">
                             <span class="alert-time"><i class="fa-solid fa-clock"></i> 1 day ago</span>
                             <span class="alert-type"><i class="fa-solid fa-tag"></i> Scam</span>
@@ -257,7 +262,8 @@
                                 <span class="badge badge-low">Low</span>
                             </div>
                         </div>
-                        <p class="alert-description">Access to potentially harmful website was blocked by web protection</p>
+                        <p class="alert-description">Access to potentially harmful website was blocked by web protection
+                        </p>
                         <div class="alert-meta">
                             <span class="alert-time"><i class="fa-solid fa-clock"></i> 5 days ago</span>
                             <span class="alert-type"><i class="fa-solid fa-tag"></i> Web Protection</span>
@@ -311,7 +317,6 @@
         <div class="bottom-spacer"></div>
     </main>
 
-    {% endblock %}
 
     <!-- JavaScript -->
     <script>
@@ -325,13 +330,13 @@
             tab.addEventListener('click', () => {
                 // Remove active class from all tabs
                 filterTabs.forEach(t => t.classList.remove('active'));
-                
+
                 // Add active to clicked tab
                 tab.classList.add('active');
-                
+
                 // Get filter value
                 const filter = tab.getAttribute('data-filter');
-                
+
                 // Filter alerts
                 filterAlerts(filter);
             });
@@ -339,10 +344,10 @@
 
         function filterAlerts(filter) {
             let visibleCount = 0;
-            
+
             alertCards.forEach(card => {
                 const status = card.getAttribute('data-status');
-                
+
                 if (filter === 'all') {
                     card.style.display = 'block';
                     visibleCount++;
@@ -353,7 +358,7 @@
                     card.style.display = 'none';
                 }
             });
-            
+
             // Show empty state if no alerts
             if (visibleCount === 0) {
                 alertsList.style.display = 'none';
@@ -374,7 +379,7 @@
 
         function sortAlerts(sortBy) {
             const alertsArray = Array.from(alertCards);
-            
+
             alertsArray.sort((a, b) => {
                 if (sortBy === 'newest') {
                     // Sort by newest (already in order, but for demo)
@@ -390,7 +395,7 @@
                     return priorityOrder[aPriority] - priorityOrder[bPriority];
                 }
             });
-            
+
             // Re-append in sorted order
             const parent = alertsList;
             alertsArray.forEach(card => parent.appendChild(card));
@@ -400,40 +405,40 @@
         const resolveButtons = document.querySelectorAll('.btn-resolve');
 
         resolveButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 const alertCard = this.closest('.alert-card');
                 const alertTitle = alertCard.querySelector('h3').textContent;
-                
+
                 if (confirm(`Mark "${alertTitle}" as resolved?`)) {
                     // Update card status
                     alertCard.classList.remove('active');
                     alertCard.classList.add('resolved');
                     alertCard.setAttribute('data-status', 'resolved');
-                    
+
                     // Update icon
                     const icon = alertCard.querySelector('.alert-icon');
                     icon.className = 'alert-icon resolved';
                     icon.innerHTML = '<i class="fa-solid fa-check-circle"></i>';
-                    
+
                     // Update badge
                     const statusBadge = alertCard.querySelector('.badge-active');
                     if (statusBadge) {
                         statusBadge.className = 'badge badge-resolved';
                         statusBadge.textContent = 'Resolved';
                     }
-                    
+
                     // Remove unread dot
                     const unreadDot = alertCard.querySelector('.unread-dot');
                     if (unreadDot) {
                         unreadDot.remove();
                     }
-                    
+
                     // Remove resolve button
                     this.remove();
-                    
+
                     // Update counts
                     updateCounts();
-                    
+
                     // Show success message
                     showNotification('Alert marked as resolved!');
                 }
@@ -444,10 +449,10 @@
         const viewButtons = document.querySelectorAll('.btn-view');
 
         viewButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 const alertCard = this.closest('.alert-card');
                 const alertTitle = alertCard.querySelector('h3').textContent;
-                
+
                 // TODO: Navigate to alert details page or show modal
                 alert(`Viewing details for: ${alertTitle}`);
                 // window.location.href = 'alert-details.html?id=123';
@@ -460,7 +465,7 @@
         clearAllBtn.addEventListener('click', () => {
             if (confirm('Are you sure you want to clear all resolved alerts? This action cannot be undone.')) {
                 const resolvedAlerts = document.querySelectorAll('.alert-card.resolved');
-                
+
                 resolvedAlerts.forEach(alert => {
                     alert.style.animation = 'slideOut 0.3s ease';
                     setTimeout(() => {
@@ -468,9 +473,9 @@
                         updateCounts();
                     }, 300);
                 });
-                
+
                 showNotification('Resolved alerts cleared!');
-                
+
                 // Check if any alerts remain
                 setTimeout(() => {
                     if (document.querySelectorAll('.alert-card').length === 0) {
@@ -486,11 +491,11 @@
             const activeCount = document.querySelectorAll('.alert-card.active').length;
             const resolvedCount = document.querySelectorAll('.alert-card.resolved').length;
             const totalCount = activeCount + resolvedCount;
-            
+
             document.getElementById('active-count').textContent = activeCount;
             document.getElementById('resolved-count').textContent = resolvedCount;
             document.getElementById('total-count').textContent = totalCount;
-            
+
             // Update tab counts
             document.querySelector('[data-filter="all"] .tab-count').textContent = totalCount;
             document.querySelector('[data-filter="active"] .tab-count').textContent = activeCount;
@@ -501,7 +506,7 @@
         function showNotification(message) {
             // Simple alert for now (can be replaced with toast notification)
             console.log(message);
-            
+
             // Optional: Create a toast notification
             const toast = document.createElement('div');
             toast.style.cssText = `
@@ -518,7 +523,7 @@
             `;
             toast.textContent = message;
             document.body.appendChild(toast);
-            
+
             setTimeout(() => {
                 toast.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => toast.remove(), 300);
@@ -552,5 +557,4 @@
         `;
         document.head.appendChild(style);
     </script>
-</body>
-</html>
+    {% endblock %}

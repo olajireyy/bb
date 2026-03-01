@@ -1,0 +1,276 @@
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    padding-bottom: 80px;
+}
+
+/* Top Header */
+.top-header {
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-btn {
+    color: #2f077d;
+    font-size: 20px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.back-btn:hover {
+    color: #007BFF;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    justify-content: center;
+}
+
+.logo i {
+    font-size: 24px;
+    color: #2f077d;
+}
+
+.logo h1 {
+    font-size: 20px;
+    color: #2f077d;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #007BFF;
+}
+
+.header-spacer {
+    width: 20px;
+}
+
+/* Main Container */
+.education-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Page Title */
+.page-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.page-title h2 {
+    font-size: 28px;
+    color: #2f077d;
+    margin-bottom: 8px;
+}
+
+.page-title p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Scam Categories */
+.scam-category {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.scam-category h3 {
+    font-size: 18px;
+    color: #2f077d;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.scam-category h3 i {
+    color: #007BFF;
+}
+
+.scam-category p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.warning-signs {
+    margin-top: 12px;
+}
+
+.warning-signs h4 {
+    font-size: 14px;
+    color: #F44336;
+    margin-bottom: 8px;
+}
+
+.warning-signs ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.warning-signs li {
+    font-size: 14px;
+    color: #666;
+    padding: 6px 0;
+    padding-left: 24px;
+    position: relative;
+}
+
+.warning-signs li::before {
+    content: '\f00d';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: #F44336;
+    font-size: 12px;
+}
+
+.tips-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.tips-list li {
+    font-size: 14px;
+    color: #333;
+    padding: 8px 0;
+    padding-left: 28px;
+    position: relative;
+}
+
+.tips-list li::before {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: #00D084;
+    font-size: 14px;
+}
+
+/* Quick Tips Banner */
+.quick-tips-banner {
+    background: linear-gradient(135deg, #2f077d 0%, #007BFF 100%);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.quick-tips-banner h3 {
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.quick-tips-banner ul {
+    list-style: none;
+    padding: 0;
+}
+
+.quick-tips-banner li {
+    padding: 8px 0;
+    padding-left: 28px;
+    position: relative;
+}
+
+.quick-tips-banner li::before {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #999;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    flex: 1;
+    padding: 8px 0;
+}
+
+.nav-item i {
+    font-size: 22px;
+}
+
+.nav-item span {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.nav-item.active {
+    color: #007BFF;
+    border-top: 3px solid #007BFF;
+}
+
+.nav-item:hover {
+    color: #007BFF;
+}
+
+/* Bottom Spacer */
+.bottom-spacer {
+    height: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .education-container {
+        padding: 16px;
+    }
+
+    .page-title h2 {
+        font-size: 24px;
+    }
+
+    .scam-category {
+        padding: 20px;
+    }
+}

@@ -45,17 +45,17 @@
             <!-- Small Stats Cards -->
             <div class="stats-row">
                 <div class="stat-card">
-                    <div class="stat-number">2,352</div>
+                    <div class="stat-number">{{ total_scans }}</div>
                     <div class="stat-change positive">
-                        <i class="fa-solid fa-arrow-trend-up"></i> +17%
+                        <i class="fa-solid fa-arrow-trend-up"></i> Active
                     </div>
                     <div class="stat-label">Scans Performed</div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-number">7,158</div>
+                    <div class="stat-number">{{ threats_detected }}</div>
                     <div class="stat-change positive">
-                        <i class="fa-solid fa-arrow-trend-up"></i> +2%
+                        <i class="fa-solid fa-arrow-trend-up"></i> Tracked
                     </div>
                     <div class="stat-label">Threats Detected</div>
                 </div>
@@ -82,25 +82,25 @@
         <section class="quick-actions-section">
             <h2>Quick Actions</h2>
             <div class="quick-actions-grid">
-                <button class="action-btn btn-blue" onclick="location.href='../Core/scan.html'">
+                <button class="action-btn btn-blue" onclick="location.href='/scan/'">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <span class="action-title">SCAN</span>
                     <span class="action-subtitle">Link/Message</span>
                 </button>
 
-                <button class="action-btn btn-green" onclick="location.href='../Feature/verify-payment.html'">
+                <button class="action-btn btn-green" onclick="location.href='/verify-payment/'">
                     <i class="fa-solid fa-circle-check"></i>
                     <span class="action-title">VERIFY</span>
                     <span class="action-subtitle">Payment</span>
                 </button>
 
-                <button class="action-btn btn-purple" onclick="location.href='../Feature/reports.html'">
+                <button class="action-btn btn-purple" onclick="location.href='/reports/'">
                     <i class="fa-solid fa-file-lines"></i>
                     <span class="action-title">VIEW</span>
                     <span class="action-subtitle">Reports</span>
                 </button>
 
-                <button class="action-btn btn-red" onclick="location.href='../Core/alerts.html'">
+                <button class="action-btn btn-red" onclick="location.href='/alerts/'">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <span class="action-title">EMERGENCY</span>
                     <span class="action-subtitle">Alert</span>
@@ -112,65 +112,28 @@
         <section class="alerts-section">
             <div class="section-header">
                 <h2>Recent Security Alerts</h2>
-                <a href="../Feature/history.html" class="view-all">View all <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="/history/" class="view-all">View all <i class="fa-solid fa-chevron-right"></i></a>
             </div>
 
             <div class="alerts-list">
+                {% for alert in recent_alerts %}
                 <div class="alert-item">
                     <div class="alert-left">
-                        <i class="fa-solid fa-shield-halved alert-icon"></i>
+                        <i
+                            class="fa-solid {% if alert.scan_type == 'image' %}fa-file-image{% elif alert.scan_type == 'link' %}fa-link{% else %}fa-align-left{% endif %} alert-icon"></i>
                         <div class="alert-info">
-                            <h4>Phishing Email</h4>
-                            <p class="alert-time">2 hours ago</p>
+                            <h4>{{ alert.scan_type|title }} Scan</h4>
+                            <p class="alert-time">{{ alert.created_at|timesince }} ago</p>
                         </div>
                     </div>
                     <div class="alert-right">
-                        <span class="badge badge-resolved">Resolved</span>
-                        <span class="badge badge-high">High</span>
+                        <span class="badge badge-{{ alert.risk_level }}">{{ alert.risk_level|title }} Risk</span>
                     </div>
                 </div>
-
-                <div class="alert-item">
-                    <div class="alert-left">
-                        <i class="fa-solid fa-link alert-icon"></i>
-                        <div class="alert-info">
-                            <h4>Suspicious Link</h4>
-                            <p class="alert-time">5 hours ago</p>
-                        </div>
-                    </div>
-                    <div class="alert-right">
-                        <span class="badge badge-resolved">Resolved</span>
-                        <span class="badge badge-medium">Medium</span>
-                    </div>
-                </div>
-
-                <div class="alert-item">
-                    <div class="alert-left">
-                        <i class="fa-solid fa-file-invoice alert-icon"></i>
-                        <div class="alert-info">
-                            <h4>Fake Invoice</h4>
-                            <p class="alert-time">1 day ago</p>
-                        </div>
-                    </div>
-                    <div class="alert-right">
-                        <span class="badge badge-active">Active</span>
-                        <span class="badge badge-high">High</span>
-                    </div>
-                </div>
-
-                <div class="alert-item">
-                    <div class="alert-left">
-                        <i class="fa-solid fa-magnifying-glass alert-icon"></i>
-                        <div class="alert-info">
-                            <h4>Scan Attempts</h4>
-                            <p class="alert-time">2 days ago</p>
-                        </div>
-                    </div>
-                    <div class="alert-right">
-                        <span class="badge badge-monitored">Monitored</span>
-                        <span class="badge badge-low">Low</span>
-                    </div>
-                </div>
+                {% empty %}
+                <p style="padding: 1rem; color: #a1a1aa; font-size: 0.9rem;">No recent security scans found. Run your
+                    first scan to see history here!</p>
+                {% endfor %}
             </div>
         </section>
 
@@ -182,7 +145,7 @@
                     <h3>Today's Security Tip</h3>
                 </div>
                 <p class="tip-content">
-                    Beware of urgent payment requests. Scam emails often create a sense of urgency to trick you into acting quickly. Always verify the sender's identity before taking any action.
+                    {{ security_tip }}
                 </p>
             </div>
         </section>
@@ -191,4 +154,4 @@
         <div class="bottom-spacer"></div>
     </main>
 
-  {% endblock %}
+    {% endblock %}

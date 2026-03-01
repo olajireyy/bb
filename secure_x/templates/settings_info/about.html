@@ -1,0 +1,281 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSense Hub - About</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- About CSS -->
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+</head>
+
+<!-- Top Header -->
+<header class="top-header">
+    <div class="header-content">
+        <a href="/menu/" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h1>Cyber<span>Sense</span> HUB</h1>
+        </div>
+        <div class="header-spacer"></div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="about-container">
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h1>Cyber<span>Sense</span> HUB</h1>
+        <p class="tagline">Protecting Nigerian Communities from Cyber Threats</p>
+        <p class="version">Version 1.0.0</p>
+    </div>
+
+    <!-- Mission Section -->
+    <div class="about-section">
+        <div class="section-icon">
+            <i class="fa-solid fa-bullseye"></i>
+        </div>
+        <h2>Our Mission</h2>
+        <p>To empower Nigerian students, small businesses, and campus communities with accessible, intelligent
+            cybersecurity tools that detect, prevent, and respond to online threats in real-time.</p>
+    </div>
+
+    <!-- Vision Section -->
+    <div class="about-section">
+        <div class="section-icon">
+            <i class="fa-solid fa-eye"></i>
+        </div>
+        <h2>Our Vision</h2>
+        <p>To create the safest digital environment for African communities, where every individual and business can
+            conduct online activities with confidence and security.</p>
+    </div>
+
+    <!-- What We Do -->
+    <div class="features-section">
+        <h2>What We Do</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <h3>Threat Detection</h3>
+                <p>AI-powered analysis of suspicious messages, links, and images to identify scams and fraud attempts
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-shield-check"></i>
+                <h3>Payment Verification</h3>
+                <p>OCR-based verification of bank alerts to protect businesses from fake transfer screenshots</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-users"></i>
+                <h3>Campus Safety</h3>
+                <p>Community-driven incident reporting and threat tracking for educational institutions</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <h3>Security Education</h3>
+                <p>Comprehensive resources and tips to help users recognize and avoid cyber threats</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <h2>Our Impact</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">20M+</div>
+                <div class="stat-label">Nigerian Students</div>
+            </div>
+
+            <div class="stat-item">
+                <div class="stat-number">170+</div>
+                <div class="stat-label">Universities</div>
+            </div>
+
+            <div class="stat-item">
+                <div class="stat-number">500K+</div>
+                <div class="stat-label">Small Businesses</div>
+            </div>
+
+            <div class="stat-item">
+                <div class="stat-number">200+</div>
+                <div class="stat-label">Scam Patterns</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why We Built This -->
+    <div class="story-section">
+        <h2>Why We Built CyberSense Hub</h2>
+        <div class="story-content">
+            <p>Nigeria has one of the highest rates of cybercrime in Africa, with students and small businesses being
+                the most vulnerable targets. Every day, thousands of Nigerians fall victim to:</p>
+
+            <ul class="threat-list">
+                <li><i class="fa-solid fa-xmark-circle"></i> Fake scholarship scams targeting students</li>
+                <li><i class="fa-solid fa-xmark-circle"></i> Fraudulent job offers with upfront fees</li>
+                <li><i class="fa-solid fa-xmark-circle"></i> Fake bank transfer alerts used to defraud vendors</li>
+                <li><i class="fa-solid fa-xmark-circle"></i> Investment scams (MMM, Forex, etc.)</li>
+                <li><i class="fa-solid fa-xmark-circle"></i> Phishing attacks and identity theft</li>
+            </ul>
+
+            <p>We created CyberSense Hub to democratize cybersecurity protection. Our platform uses locally-trained
+                algorithms that understand Nigerian scam patterns, making protection accessible to everyone—regardless
+                of technical expertise or financial resources.</p>
+        </div>
+    </div>
+
+    <!-- Technology Section -->
+    <div class="tech-section">
+        <h2>Our Technology</h2>
+        <div class="tech-grid">
+            <div class="tech-item">
+                <i class="fa-solid fa-brain"></i>
+                <h4>Pattern Matching</h4>
+                <p>Advanced algorithms trained on 200+ Nigerian scam patterns</p>
+            </div>
+
+            <div class="tech-item">
+                <i class="fa-solid fa-camera"></i>
+                <h4>OCR Technology</h4>
+                <p>Optical Character Recognition for analyzing payment screenshots</p>
+            </div>
+
+            <div class="tech-item">
+                <i class="fa-solid fa-link"></i>
+                <h4>URL Analysis</h4>
+                <p>Real-time scanning of suspicious links and domains</p>
+            </div>
+
+            <div class="tech-item">
+                <i class="fa-solid fa-database"></i>
+                <h4>Zero API Costs</h4>
+                <p>Entirely offline detection—no expensive API dependencies</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Values Section -->
+    <div class="values-section">
+        <h2>Our Core Values</h2>
+        <div class="values-list">
+            <div class="value-item">
+                <div class="value-icon blue">
+                    <i class="fa-solid fa-universal-access"></i>
+                </div>
+                <div class="value-content">
+                    <h3>Accessibility</h3>
+                    <p>Free, easy-to-use protection for everyone</p>
+                </div>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon green">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div class="value-content">
+                    <h3>Privacy</h3>
+                    <p>Your data stays private—we never share or sell information</p>
+                </div>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon purple">
+                    <i class="fa-solid fa-hands-helping"></i>
+                </div>
+                <div class="value-content">
+                    <h3>Community</h3>
+                    <p>Built by Nigerians, for Nigerians and African communities</p>
+                </div>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon orange">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <div class="value-content">
+                    <h3>Innovation</h3>
+                    <p>Continuously evolving to counter new threats</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="contact-info-section">
+        <h2>Get In Touch</h2>
+        <div class="contact-grid">
+            <div class="contact-item">
+                <i class="fa-solid fa-envelope"></i>
+                <h4>Email</h4>
+                <a href="mailto:info@cybersensehub.com">info@cybersensehub.com</a>
+            </div>
+
+            <div class="contact-item">
+                <i class="fa-solid fa-phone"></i>
+                <h4>Phone</h4>
+                <a href="tel:+2348001234567">+234 800 123 4567</a>
+            </div>
+
+            <div class="contact-item">
+                <i class="fa-solid fa-map-marker-alt"></i>
+                <h4>Location</h4>
+                <p>Lagos, Nigeria</p>
+            </div>
+
+            <div class="contact-item">
+                <i class="fa-solid fa-globe"></i>
+                <h4>Website</h4>
+                <a href="https://cybersensehub.com">cybersensehub.com</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Social Media -->
+    <div class="social-section">
+        <h2>Follow Us</h2>
+        <div class="social-links">
+            <a href="#" class="social-btn twitter">
+                <i class="fa-brands fa-twitter"></i>
+            </a>
+            <a href="#" class="social-btn facebook">
+                <i class="fa-brands fa-facebook"></i>
+            </a>
+            <a href="#" class="social-btn instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="#" class="social-btn linkedin">
+                <i class="fa-brands fa-linkedin"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="legal-section">
+        <div class="legal-links">
+            <a href="#">Privacy Policy</a>
+            <span>•</span>
+            <a href="#">Terms of Service</a>
+            <span>•</span>
+            <a href="#">Cookie Policy</a>
+        </div>
+        <p class="copyright">&copy; 2026 Secure X. All rights reserved.</p>
+    </div>
+
+    <!-- Bottom Spacer -->
+    <div class="bottom-spacer"></div>
+</main>
+
+{% endblock %}

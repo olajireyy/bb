@@ -4,23 +4,23 @@
 {% endblock %}
 <!-- Bottom Navigation -->
 <nav class="bottom-nav">
-    <a href="{% url 'dashboard' %}" class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+    <a href="/dashboard/" class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
         <i class="fa-solid fa-house"></i>
         <span>Home</span>
     </a>
-    <a href="{% url 'scan' %}" class="nav-item {% if active_page == 'scan' %}active{% endif %}">
+    <a href="/scan/" class="nav-item {% if active_page == 'scan' %}active{% endif %}">
         <i class="fa-solid fa-file"></i>
         <span>Scan</span>
     </a>
-    <a href="{% url 'web-protection' %}" class="nav-item {% if active_page == 'web' %}active{% endif %}">
+    <a href="/web-protection/" class="nav-item {% if active_page == 'web' %}active{% endif %}">
         <i class="fa-solid fa-globe"></i>
         <span>Web</span>
     </a>
-    <a href="{% url 'alerts' %}" class="nav-item {% if active_page == 'alerts' %}active{% endif %}">
+    <a href="/alerts/" class="nav-item {% if active_page == 'alerts' %}active{% endif %}">
         <i class="fa-solid fa-bell"></i>
         <span>Alerts</span>
     </a>
-    <a href="{% url 'menu' %}" class="nav-item {% if active_page == 'menu' %}active{% endif %}">
+    <a href="/menu/" class="nav-item {% if active_page == 'menu' %}active{% endif %}">
         <i class="fa-solid fa-bars"></i>
         <span>Menu</span>
     </a>
