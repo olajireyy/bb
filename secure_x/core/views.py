@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .models import ScanHistory
+from .models import ScanHistory, CampusReport, ReportEvidence
 
 # Create your views here.
 @login_required
@@ -153,6 +153,7 @@ def scan_api(request):
                                 ScanHistory.objects.create(
                                     user=request.user,
                                     scan_type=scan_type,
+                                    scanned_content=f"Image Scan ({file.name})",
                                     risk_level=res_json.get('risk_level', 'low'),
                                     risk_score=res_json.get('risk_score', 0),
                                     patterns=res_json.get('patterns', [])
@@ -180,6 +181,7 @@ def scan_api(request):
                         ScanHistory.objects.create(
                             user=request.user,
                             scan_type=scan_type,
+                            scanned_content=f"Image Scan ({file.name})",
                             risk_level=fallback_res['risk_level'],
                             risk_score=fallback_res['risk_score'],
                             patterns=fallback_res['patterns']
@@ -202,6 +204,7 @@ def scan_api(request):
                 ScanHistory.objects.create(
                     user=request.user,
                     scan_type=scan_type,
+                    scanned_content=content,
                     risk_level=res_json.get('risk_level', 'low'),
                     risk_score=res_json.get('risk_score', 0),
                     patterns=res_json.get('patterns', [])
@@ -328,6 +331,7 @@ def scan_api(request):
                 ScanHistory.objects.create(
                     user=request.user,
                     scan_type=scan_type,
+                    scanned_content=content,
                     risk_level=risk_level,
                     risk_score=risk_score,
                     patterns=patterns
@@ -389,6 +393,18 @@ def settings_view(request):
     return render(request, 'settings_info/settings.html', {'active_page': 'settings'})
 
 @login_required
+def submit_report_view(request):
+    return render(request, 'feature/submit-report.html', {'active_page': 'submit-report'})
+
+@login_required
+def notifications_view(request):
+    user_scans = ScanHistory.objects.filter(user=request.user).order_by('-created_at')[:20]
+    return render(request, 'feature/notifications.html', {
+        'active_page': 'notifications',
+        'notifications': user_scans
+    })
+
+@login_required
 @csrf_exempt
 def resolve_alert(request, scan_id):
     if request.method == 'POST':
@@ -418,6 +434,7 @@ def get_scan_details(request, scan_id):
             'data': {
                 'id': scan.id,
                 'scan_type': scan.scan_type,
+                'scanned_content': scan.scanned_content,
                 'risk_level': scan.risk_level,
                 'risk_score': scan.risk_score,
                 'patterns': scan.patterns,
@@ -599,3 +616,63 @@ def delete_account_api(request):
         return JsonResponse({"status": "success", "message": "Account deleted securely"})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
+
+@login_required
+@csrf_exempt
+def change_password_api(request):
+    if request.method != 'POST':
+        return JsonResponse({"error": "Invalid method"}, status=405)
+        
+    try:
+        user = request.user
+        current_password = request.POST.get('currentPassword', '')
+        new_password = request.POST.get('newPassword', '')
+        
+        if not user.check_password(current_password):
+            return JsonResponse({"error": "Incorrect current password."}, status=400)
+            
+        if len(new_password) < 8:
+            return JsonResponse({"error": "Password must be at least 8 characters long."}, status=400)
+            
+        user.set_password(new_password)
+        user.save()
+        
+        # Optionally, keep the user logged in after password change (update_session_auth_hash)
+        from django.contrib.auth import update_session_auth_hash
+        update_session_auth_hash(request, user)
+        
+        return JsonResponse({"status": "success", "message": "Password updated successfully"})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
+
+@login_required
+def get_report_details(request, report_id):
+    try:
+        report = CampusReport.objects.get(report_id=report_id)
+        # Assuming you only want to allow viewing if it is the user's report or they are admins.
+        # This code assumes any authenticated user can view reports shown in their list
+        data = {
+            'report_id': report.report_id,
+            'title': report.title,
+            'description': report.description,
+            'incident_type': report.incident_type,
+            'campus': report.campus,
+            'priority': report.priority,
+            'status': report.status,
+            'created_at': report.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'user': 'Anonymous' if report.is_anonymous else (report.user.full_name if report.user else 'Unknown')
+        }
+        
+        # Check for evidence
+        evidence_files = ReportEvidence.objects.filter(report=report)
+        evidence_list = []
+        for e in evidence_files:
+            evidence_list.append({
+                'url': e.file.url,
+                'name': e.file.name.split('/')[-1]
+            })
+        data['evidence'] = evidence_list
+        
+        return JsonResponse({'status': 'success', 'data': data})
+    except CampusReport.DoesNotExist:
+        return JsonResponse({'error': 'Report not found'}, status=404)

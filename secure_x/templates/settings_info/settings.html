@@ -1,736 +1,862 @@
-{% extends 'core/base.html' %}
-{% block content %}
-{% load static %}
+{% extends 'core/base.html' %} {% block content %} {% load static %}
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberSense Hub - Settings</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyberSense Hub - Settings</title>
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
 
-    <!-- Settings CSS -->
-    <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+  <!-- Settings CSS -->
+  <link rel="stylesheet" href="{% static 'css/settings.css' %}" />
 </head>
 
 <!-- Top Header -->
 <header class="top-header">
-    <div class="header-content">
-        <a href="/menu/" class="back-btn">
-            <i class="fa-solid fa-arrow-left"></i>
-        </a>
-        <div class="logo">
-            <i class="fa-solid fa-shield-halved"></i>
-            <h1>Cyber<span>Sense</span> HUB</h1>
-        </div>
-        <div class="header-spacer"></div>
+  <div class="header-content">
+    <a href="/menu/" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div class="logo">
+      <i class="fa-solid fa-shield-halved"></i>
+      <h1>Cyber<span>Sense</span> HUB</h1>
     </div>
+    <div class="header-spacer"></div>
+  </div>
 </header>
 
 <!-- Main Content -->
 <main class="settings-container">
-    <!-- Page Title -->
-    <div class="page-title">
-        <h2>Settings</h2>
-        <p>Manage your account and preferences</p>
-    </div>
+  <!-- Page Title -->
+  <div class="page-title">
+    <h2>Settings</h2>
+    <p>Manage your account and preferences</p>
+  </div>
 
-    <!-- Profile Section -->
-    <div class="settings-section">
-        <h3><i class="fa-solid fa-user"></i> Profile Information</h3>
-        <div class="settings-card">
-            <div class="profile-display">
-                <div class="profile-avatar-large">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-                <div class="profile-info">
-                    <h4 id="display-name">{{ request.user.full_name|default:"CyberSense User" }}</h4>
-                    <p id="display-email">{{ request.user.email }}</p>
-                    <span class="user-type-badge" id="display-user-type">{{
-                        request.user.user_type|title|default:"Student" }}</span>
-                </div>
-                <button class="btn-edit" id="edit-profile-btn">
-                    <i class="fa-solid fa-pen"></i> Edit Profile
-                </button>
-            </div>
-
-            <!-- Edit Profile Form (Hidden by default) -->
-            <div class="edit-profile-form" id="edit-profile-form" style="display: none;">
-                <div class="form-group">
-                    <label for="full-name">Full Name</label>
-                    <input type="text" id="full-name" value="{{ request.user.full_name }}">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" value="{{ request.user.email }}">
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" value="{{ request.user.phone }}">
-                </div>
-
-                <div class="form-group">
-                    <label for="user-type">User Type</label>
-                    <select id="user-type">
-                        <option value="student" {% if request.user.user_type =='student' %}selected{% endif %}>Student
-                        </option>
-                        <option value="business" {% if request.user.user_type =='business' %}selected{% endif %}>Business
-                            Owner</option>
-                        <option value="institution" {% if request.user.user_type =='institution' %}selected{% endif %}>
-                            Institution</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="campus">Campus / Institution</label>
-                    <select id="campus">
-                        <option value="unilag" selected>University of Lagos</option>
-                        <option value="covenant">Covenant University</option>
-                        <option value="oau">Obafemi Awolowo University</option>
-                        <option value="ui">University of Ibadan</option>
-                        <option value="abu">Ahmadu Bello University</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-actions">
-                    <button class="btn-cancel" id="cancel-edit-btn">Cancel</button>
-                    <button class="btn-save" id="save-profile-btn">
-                        <i class="fa-solid fa-check"></i> Save Changes
-                    </button>
-                </div>
-            </div>
+  <!-- Profile Section -->
+  <div class="settings-section">
+    <h3><i class="fa-solid fa-user"></i> Profile Information</h3>
+    <div class="settings-card">
+      <div class="profile-display">
+        <div class="profile-avatar-large">
+          <i class="fa-solid fa-user"></i>
         </div>
-    </div>
-
-    <!-- Security Section -->
-    <div class="settings-section">
-        <h3><i class="fa-solid fa-lock"></i> Security</h3>
-        <div class="settings-card">
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Change Password</h4>
-                    <p>Update your password to keep your account secure</p>
-                </div>
-                <button class="btn-action" id="change-password-btn">
-                    <i class="fa-solid fa-key"></i> Change
-                </button>
-            </div>
-
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Two-Factor Authentication</h4>
-                    <p>Add an extra layer of security to your account</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="two-factor-toggle">
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <!-- Change Password Form (Hidden) -->
-            <div class="password-form" id="password-form" style="display: none;">
-                <div class="form-group">
-                    <label for="current-password">Current Password</label>
-                    <div class="password-input-wrapper">
-                        <input type="password" id="current-password" placeholder="Enter current password">
-                        <i class="fa-solid fa-eye toggle-password"
-                            onclick="togglePasswordVisibility('current-password')"></i>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="new-password">New Password</label>
-                    <div class="password-input-wrapper">
-                        <input type="password" id="new-password" placeholder="Enter new password">
-                        <i class="fa-solid fa-eye toggle-password"
-                            onclick="togglePasswordVisibility('new-password')"></i>
-                    </div>
-                    <div class="password-strength">
-                        <div class="strength-bar">
-                            <div class="strength-bar-fill" id="strength-fill"></div>
-                        </div>
-                        <p class="strength-text" id="strength-text">Password strength: Weak</p>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="confirm-password">Confirm New Password</label>
-                    <div class="password-input-wrapper">
-                        <input type="password" id="confirm-password" placeholder="Confirm new password">
-                        <i class="fa-solid fa-eye toggle-password"
-                            onclick="togglePasswordVisibility('confirm-password')"></i>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button class="btn-cancel" id="cancel-password-btn">Cancel</button>
-                    <button class="btn-save" id="save-password-btn">
-                        <i class="fa-solid fa-check"></i> Update Password
-                    </button>
-                </div>
-            </div>
+        <div class="profile-info">
+          <h4 id="display-name">
+            {{ request.user.full_name|default:"CyberSense User" }}
+          </h4>
+          <p id="display-email">{{ request.user.email }}</p>
+          <span class="user-type-badge" id="display-user-type"
+            >{{ request.user.user_type|title|default:"Student" }}</span
+          >
         </div>
-    </div>
+        <button class="btn-edit" id="edit-profile-btn">
+          <i class="fa-solid fa-pen"></i> Edit Profile
+        </button>
+      </div>
 
-    <!-- Notifications Section -->
-    <div class="settings-section">
-        <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
-        <div class="settings-card">
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Email Notifications</h4>
-                    <p>Receive security alerts and updates via email</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="email-notifications" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Push Notifications</h4>
-                    <p>Get real-time alerts on your device</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="push-notifications" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Threat Alerts</h4>
-                    <p>Notify me about new threats on campus</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="threat-alerts" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Weekly Reports</h4>
-                    <p>Receive weekly security summary</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="weekly-reports">
-                    <span class="slider"></span>
-                </label>
-            </div>
+      <!-- Edit Profile Form (Hidden by default) -->
+      <div
+        class="edit-profile-form"
+        id="edit-profile-form"
+        style="display: none"
+      >
+        <div class="form-group">
+          <label for="full-name">Full Name</label>
+          <input
+            type="text"
+            id="full-name"
+            value="{{ request.user.full_name }}"
+          />
         </div>
-    </div>
 
-    <!-- Privacy Section -->
-    <div class="settings-section">
-        <h3><i class="fa-solid fa-shield-halved"></i> Privacy</h3>
-        <div class="settings-card">
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Anonymous Reporting</h4>
-                    <p>Always submit reports anonymously by default</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="anonymous-default">
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Share Analytics</h4>
-                    <p>Help improve the app by sharing usage data</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="share-analytics" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" value="{{ request.user.email }}" />
         </div>
-    </div>
 
-    <!-- App Settings -->
-    <div class="settings-section">
-        <h3><i class="fa-solid fa-sliders"></i> App Settings</h3>
-        <div class="settings-card">
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Language</h4>
-                    <p>Choose your preferred language</p>
-                </div>
-                <select class="setting-select" id="language-select">
-                    <option value="en" selected>English</option>
-                    <option value="yo">Yoruba</option>
-                    <option value="ig">Igbo</option>
-                    <option value="ha">Hausa</option>
-                </select>
-            </div>
-
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Theme</h4>
-                    <p>Choose your app appearance</p>
-                </div>
-                <select class="setting-select" id="theme-select">
-                    <option value="light" selected>Light</option>
-                    <option value="dark">Dark</option>
-                    <option value="auto">Auto (System)</option>
-                </select>
-            </div>
-
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Auto-Scan Links</h4>
-                    <p>Automatically scan links before opening</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="auto-scan" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" value="{{ request.user.phone }}" />
         </div>
-    </div>
 
-    <!-- Data & Storage -->
-    <div class="settings-section">
-        <h3><i class="fa-solid fa-database"></i> Data & Storage</h3>
-        <div class="settings-card">
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Clear Cache</h4>
-                    <p>Free up space by clearing temporary data</p>
-                </div>
-                <button class="btn-action" id="clear-cache-btn">
-                    <i class="fa-solid fa-trash"></i> Clear
-                </button>
-            </div>
-
-            <div class="setting-item">
-                <div class="setting-info">
-                    <h4>Download My Data</h4>
-                    <p>Export all your data in JSON format</p>
-                </div>
-                <button class="btn-action" id="download-data-btn">
-                    <i class="fa-solid fa-download"></i> Download
-                </button>
-            </div>
-
-            <div class="setting-item danger">
-                <div class="setting-info">
-                    <h4>Delete Account</h4>
-                    <p>Permanently delete your account and all data</p>
-                </div>
-                <button class="btn-danger" id="delete-account-btn">
-                    <i class="fa-solid fa-trash"></i> Delete
-                </button>
-            </div>
+        <div class="form-group">
+          <label for="user-type">User Type</label>
+          <select id="user-type">
+            <option
+              value="student"
+              {%
+              if
+              request.user.user_type=""
+              ="student"
+              %}selected{%
+              endif
+              %}
+            >
+              Student
+            </option>
+            <option
+              value="business"
+              {%
+              if
+              request.user.user_type=""
+              ="business"
+              %}selected{%
+              endif
+              %}
+            >
+              Business Owner
+            </option>
+            <option
+              value="institution"
+              {%
+              if
+              request.user.user_type=""
+              ="institution"
+              %}selected{%
+              endif
+              %}
+            >
+              Institution
+            </option>
+          </select>
         </div>
-    </div>
 
-    <!-- About Section -->
-    <div class="settings-section">
-        <h3><i class="fa-solid fa-circle-info"></i> About</h3>
-        <div class="settings-card">
-            <div class="about-item">
-                <span>Version</span>
-                <strong>1.0.0</strong>
-            </div>
-            <div class="about-item">
-                <span>Last Updated</span>
-                <strong>February 16, 2026</strong>
-            </div>
-            <div class="about-item">
-                <a href="#" class="about-link">Privacy Policy</a>
-            </div>
-            <div class="about-item">
-                <a href="#" class="about-link">Terms of Service</a>
-            </div>
-            <div class="about-item">
-                <a href="#" class="about-link">Help Center</a>
-            </div>
+        <div class="form-group">
+          <label for="campus">Campus / Institution</label>
+          <select id="campus">
+            <option value="unilag" selected>University of Lagos</option>
+            <option value="covenant">Covenant University</option>
+            <option value="oau">Obafemi Awolowo University</option>
+            <option value="ui">University of Ibadan</option>
+            <option value="abu">Ahmadu Bello University</option>
+            <option value="other">Other</option>
+          </select>
         </div>
+
+        <div class="form-actions">
+          <button class="btn-cancel" id="cancel-edit-btn">Cancel</button>
+          <button class="btn-save" id="save-profile-btn">
+            <i class="fa-solid fa-check"></i> Save Changes
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Logout Button -->
-    <button class="logout-btn" id="logout-btn">
-        <i class="fa-solid fa-right-from-bracket"></i>
-        <span>Logout</span>
-    </button>
+  <!-- Security Section -->
+  <div class="settings-section">
+    <h3><i class="fa-solid fa-lock"></i> Security</h3>
+    <div class="settings-card">
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Change Password</h4>
+          <p>Update your password to keep your account secure</p>
+        </div>
+        <button class="btn-action" id="change-password-btn">
+          <i class="fa-solid fa-key"></i> Change
+        </button>
+      </div>
 
-    <!-- Bottom Spacer -->
-    <div class="bottom-spacer"></div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Two-Factor Authentication</h4>
+          <p>Add an extra layer of security to your account</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="two-factor-toggle" />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Change Password Form (Hidden) -->
+      <div class="password-form" id="password-form" style="display: none">
+        <div class="form-group">
+          <label for="current-password">Current Password</label>
+          <div class="password-input-wrapper">
+            <input
+              type="password"
+              id="current-password"
+              placeholder="Enter current password"
+            />
+            <i
+              class="fa-solid fa-eye toggle-password"
+              onclick="togglePasswordVisibility('current-password')"
+            ></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="new-password">New Password</label>
+          <div class="password-input-wrapper">
+            <input
+              type="password"
+              id="new-password"
+              placeholder="Enter new password"
+            />
+            <i
+              class="fa-solid fa-eye toggle-password"
+              onclick="togglePasswordVisibility('new-password')"
+            ></i>
+          </div>
+          <div class="password-strength">
+            <div class="strength-bar">
+              <div class="strength-bar-fill" id="strength-fill"></div>
+            </div>
+            <p class="strength-text" id="strength-text">
+              Password strength: Weak
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirm-password">Confirm New Password</label>
+          <div class="password-input-wrapper">
+            <input
+              type="password"
+              id="confirm-password"
+              placeholder="Confirm new password"
+            />
+            <i
+              class="fa-solid fa-eye toggle-password"
+              onclick="togglePasswordVisibility('confirm-password')"
+            ></i>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-cancel" id="cancel-password-btn">Cancel</button>
+          <button class="btn-save" id="save-password-btn">
+            <i class="fa-solid fa-check"></i> Update Password
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications Section -->
+  <div class="settings-section">
+    <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+    <div class="settings-card">
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Email Notifications</h4>
+          <p>Receive security alerts and updates via email</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="email-notifications" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Push Notifications</h4>
+          <p>Get real-time alerts on your device</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="push-notifications" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Threat Alerts</h4>
+          <p>Notify me about new threats on campus</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="threat-alerts" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Weekly Reports</h4>
+          <p>Receive weekly security summary</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="weekly-reports" />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Section -->
+  <div class="settings-section">
+    <h3><i class="fa-solid fa-shield-halved"></i> Privacy</h3>
+    <div class="settings-card">
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Anonymous Reporting</h4>
+          <p>Always submit reports anonymously by default</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="anonymous-default" />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Share Analytics</h4>
+          <p>Help improve the app by sharing usage data</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="share-analytics" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Settings -->
+  <div class="settings-section">
+    <h3><i class="fa-solid fa-sliders"></i> App Settings</h3>
+    <div class="settings-card">
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Language</h4>
+          <p>Choose your preferred language</p>
+        </div>
+        <select class="setting-select" id="language-select">
+          <option value="en" selected>English</option>
+          <option value="yo">Yoruba</option>
+          <option value="ig">Igbo</option>
+          <option value="ha">Hausa</option>
+        </select>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Theme</h4>
+          <p>Choose your app appearance</p>
+        </div>
+        <select class="setting-select" id="theme-select">
+          <option value="light" selected>Light</option>
+          <option value="dark">Dark</option>
+          <option value="auto">Auto (System)</option>
+        </select>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Auto-Scan Links</h4>
+          <p>Automatically scan links before opening</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="auto-scan" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data & Storage -->
+  <div class="settings-section">
+    <h3><i class="fa-solid fa-database"></i> Data & Storage</h3>
+    <div class="settings-card">
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Clear Cache</h4>
+          <p>Free up space by clearing temporary data</p>
+        </div>
+        <button class="btn-action" id="clear-cache-btn">
+          <i class="fa-solid fa-trash"></i> Clear
+        </button>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Download My Data</h4>
+          <p>Export all your data in JSON format</p>
+        </div>
+        <button class="btn-action" id="download-data-btn">
+          <i class="fa-solid fa-download"></i> Download
+        </button>
+      </div>
+
+      <div class="setting-item danger">
+        <div class="setting-info">
+          <h4>Delete Account</h4>
+          <p>Permanently delete your account and all data</p>
+        </div>
+        <button class="btn-danger" id="delete-account-btn">
+          <i class="fa-solid fa-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div class="settings-section">
+    <h3><i class="fa-solid fa-circle-info"></i> About</h3>
+    <div class="settings-card">
+      <div class="about-item">
+        <span>Version</span>
+        <strong>1.0.0</strong>
+      </div>
+      <div class="about-item">
+        <span>Last Updated</span>
+        <strong>February 16, 2026</strong>
+      </div>
+      <div class="about-item">
+        <a href="#" class="about-link">Privacy Policy</a>
+      </div>
+      <div class="about-item">
+        <a href="#" class="about-link">Terms of Service</a>
+      </div>
+      <div class="about-item">
+        <a href="#" class="about-link">Help Center</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Button -->
+  <button class="logout-btn" id="logout-btn">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    <span>Logout</span>
+  </button>
+
+  <!-- Bottom Spacer -->
+  <div class="bottom-spacer"></div>
 </main>
 
 <!-- Bottom Navigation -->
 
 <!-- JavaScript -->
 <script>
-    // Elements
-    const editProfileBtn = document.getElementById('edit-profile-btn');
-    const editProfileForm = document.getElementById('edit-profile-form');
-    const cancelEditBtn = document.getElementById('cancel-edit-btn');
-    const saveProfileBtn = document.getElementById('save-profile-btn');
-    const changePasswordBtn = document.getElementById('change-password-btn');
-    const passwordForm = document.getElementById('password-form');
-    const cancelPasswordBtn = document.getElementById('cancel-password-btn');
-    const savePasswordBtn = document.getElementById('save-password-btn');
-    const newPasswordInput = document.getElementById('new-password');
-    const strengthFill = document.getElementById('strength-fill');
-    const strengthText = document.getElementById('strength-text');
-    const logoutBtn = document.getElementById('logout-btn');
-    const deleteAccountBtn = document.getElementById('delete-account-btn');
-    const clearCacheBtn = document.getElementById('clear-cache-btn');
-    const downloadDataBtn = document.getElementById('download-data-btn');
+  // Elements
+  const editProfileBtn = document.getElementById("edit-profile-btn");
+  const editProfileForm = document.getElementById("edit-profile-form");
+  const cancelEditBtn = document.getElementById("cancel-edit-btn");
+  const saveProfileBtn = document.getElementById("save-profile-btn");
+  const changePasswordBtn = document.getElementById("change-password-btn");
+  const passwordForm = document.getElementById("password-form");
+  const cancelPasswordBtn = document.getElementById("cancel-password-btn");
+  const savePasswordBtn = document.getElementById("save-password-btn");
+  const newPasswordInput = document.getElementById("new-password");
+  const strengthFill = document.getElementById("strength-fill");
+  const strengthText = document.getElementById("strength-text");
+  const logoutBtn = document.getElementById("logout-btn");
+  const deleteAccountBtn = document.getElementById("delete-account-btn");
+  const clearCacheBtn = document.getElementById("clear-cache-btn");
+  const downloadDataBtn = document.getElementById("download-data-btn");
 
-    // Edit Profile Toggle
-    editProfileBtn.addEventListener('click', () => {
-        const profileDisplay = document.querySelector('.profile-display');
+  // Edit Profile Toggle
+  editProfileBtn.addEventListener("click", () => {
+    const profileDisplay = document.querySelector(".profile-display");
 
-        if (editProfileForm.style.display === 'none') {
-            editProfileForm.style.display = 'block';
-            profileDisplay.style.display = 'none';
-        }
-    });
+    if (editProfileForm.style.display === "none") {
+      editProfileForm.style.display = "block";
+      profileDisplay.style.display = "none";
+    }
+  });
 
-    // Cancel Edit Profile
-    cancelEditBtn.addEventListener('click', () => {
-        const profileDisplay = document.querySelector('.profile-display');
-        editProfileForm.style.display = 'none';
-        profileDisplay.style.display = 'flex';
-    });
+  // Cancel Edit Profile
+  cancelEditBtn.addEventListener("click", () => {
+    const profileDisplay = document.querySelector(".profile-display");
+    editProfileForm.style.display = "none";
+    profileDisplay.style.display = "flex";
+  });
 
-    // Save Profile
-    saveProfileBtn.addEventListener('click', async () => {
-        const fullName = document.getElementById('full-name').value;
-        const email = document.getElementById('email').value;
-        const phone = document.getElementById('phone').value;
-        const userType = document.getElementById('user-type').value;
+  // Save Profile
+  saveProfileBtn.addEventListener("click", async () => {
+    const fullName = document.getElementById("full-name").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const userType = document.getElementById("user-type").value;
 
-        // Validate
-        if (!fullName || !email) {
-            showNotification('Please fill all required fields', 'error');
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('fullName', fullName);
-        formData.append('email', email);
-        formData.append('phone', phone);
-        formData.append('userType', userType);
-
-        // Disable button to prevent multi-submissions
-        saveProfileBtn.disabled = true;
-        saveProfileBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
-
-        try {
-            const response = await fetch('/api/update_profile/', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.error || 'Failed to update profile');
-            }
-
-            // Update display securely
-            document.getElementById('display-name').textContent = fullName;
-            document.getElementById('display-email').textContent = email;
-
-            const userTypeText = { 'student': 'Student', 'business': 'Business Owner', 'institution': 'Institution' };
-            document.getElementById('display-user-type').textContent = userTypeText[userType];
-
-            console.log('Profile updated via API');
-
-            // Hide form
-            const profileDisplay = document.querySelector('.profile-display');
-            editProfileForm.style.display = 'none';
-            profileDisplay.style.display = 'flex';
-
-            showNotification('Profile updated successfully!');
-        } catch (e) {
-            showNotification(e.message, 'error');
-            console.error(e);
-        } finally {
-            saveProfileBtn.disabled = false;
-            saveProfileBtn.innerHTML = '<i class="fa-solid fa-check"></i> Save Changes';
-        }
-    });
-
-    // Change Password Toggle
-    changePasswordBtn.addEventListener('click', () => {
-        if (passwordForm.style.display === 'none') {
-            passwordForm.style.display = 'block';
-            changePasswordBtn.textContent = 'Cancel';
-            changePasswordBtn.innerHTML = '<i class="fa-solid fa-xmark"></i> Cancel';
-        } else {
-            passwordForm.style.display = 'none';
-            changePasswordBtn.innerHTML = '<i class="fa-solid fa-key"></i> Change';
-            clearPasswordFields();
-        }
-    });
-
-    // Cancel Password Change
-    cancelPasswordBtn.addEventListener('click', () => {
-        passwordForm.style.display = 'none';
-        changePasswordBtn.innerHTML = '<i class="fa-solid fa-key"></i> Change';
-        clearPasswordFields();
-    });
-
-    // Clear Password Fields
-    function clearPasswordFields() {
-        document.getElementById('current-password').value = '';
-        document.getElementById('new-password').value = '';
-        document.getElementById('confirm-password').value = '';
-        strengthFill.style.width = '0%';
-        strengthText.textContent = 'Password strength: Weak';
+    // Validate
+    if (!fullName || !email) {
+      showNotification("Please fill all required fields", "error");
+      return;
     }
 
-    // Password Strength Checker
-    newPasswordInput.addEventListener('input', function () {
-        const password = this.value;
-        let strength = 0;
+    const formData = new FormData();
+    formData.append("fullName", fullName);
+    formData.append("email", email);
+    formData.append("phone", phone);
+    formData.append("userType", userType);
 
-        if (password.length >= 8) strength++;
-        if (password.match(/[a-z]+/)) strength++;
-        if (password.match(/[A-Z]+/)) strength++;
-        if (password.match(/[0-9]+/)) strength++;
-        if (password.match(/[^a-zA-Z0-9]+/)) strength++;
+    // Disable button to prevent multi-submissions
+    saveProfileBtn.disabled = true;
+    saveProfileBtn.innerHTML =
+      '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
 
-        const strengthPercent = (strength / 5) * 100;
-        strengthFill.style.width = strengthPercent + '%';
+    try {
+      const response = await fetch("/api/update_profile/", {
+        method: "POST",
+        body: formData,
+      });
 
-        if (strength <= 2) {
-            strengthFill.style.backgroundColor = '#F44336';
-            strengthText.textContent = 'Password strength: Weak';
-            strengthText.style.color = '#F44336';
-        } else if (strength <= 3) {
-            strengthFill.style.backgroundColor = '#FF9800';
-            strengthText.textContent = 'Password strength: Medium';
-            strengthText.style.color = '#FF9800';
-        } else {
-            strengthFill.style.backgroundColor = '#00D084';
-            strengthText.textContent = 'Password strength: Strong';
-            strengthText.style.color = '#00D084';
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "Failed to update profile");
+      }
+
+      // Update display securely
+      document.getElementById("display-name").textContent = fullName;
+      document.getElementById("display-email").textContent = email;
+
+      const userTypeText = {
+        student: "Student",
+        business: "Business Owner",
+        institution: "Institution",
+      };
+      document.getElementById("display-user-type").textContent =
+        userTypeText[userType];
+
+      console.log("Profile updated via API");
+
+      // Hide form
+      const profileDisplay = document.querySelector(".profile-display");
+      editProfileForm.style.display = "none";
+      profileDisplay.style.display = "flex";
+
+      showNotification("Profile updated successfully!");
+    } catch (e) {
+      showNotification(e.message, "error");
+      console.error(e);
+    } finally {
+      saveProfileBtn.disabled = false;
+      saveProfileBtn.innerHTML =
+        '<i class="fa-solid fa-check"></i> Save Changes';
+    }
+  });
+
+  // Change Password Toggle
+  changePasswordBtn.addEventListener("click", () => {
+    if (passwordForm.style.display === "none") {
+      passwordForm.style.display = "block";
+      changePasswordBtn.textContent = "Cancel";
+      changePasswordBtn.innerHTML = '<i class="fa-solid fa-xmark"></i> Cancel';
+    } else {
+      passwordForm.style.display = "none";
+      changePasswordBtn.innerHTML = '<i class="fa-solid fa-key"></i> Change';
+      clearPasswordFields();
+    }
+  });
+
+  // Cancel Password Change
+  cancelPasswordBtn.addEventListener("click", () => {
+    passwordForm.style.display = "none";
+    changePasswordBtn.innerHTML = '<i class="fa-solid fa-key"></i> Change';
+    clearPasswordFields();
+  });
+
+  // Clear Password Fields
+  function clearPasswordFields() {
+    document.getElementById("current-password").value = "";
+    document.getElementById("new-password").value = "";
+    document.getElementById("confirm-password").value = "";
+    strengthFill.style.width = "0%";
+    strengthText.textContent = "Password strength: Weak";
+  }
+
+  // Password Strength Checker
+  newPasswordInput.addEventListener("input", function () {
+    const password = this.value;
+    let strength = 0;
+
+    if (password.length >= 8) strength++;
+    if (password.match(/[a-z]+/)) strength++;
+    if (password.match(/[A-Z]+/)) strength++;
+    if (password.match(/[0-9]+/)) strength++;
+    if (password.match(/[^a-zA-Z0-9]+/)) strength++;
+
+    const strengthPercent = (strength / 5) * 100;
+    strengthFill.style.width = strengthPercent + "%";
+
+    if (strength <= 2) {
+      strengthFill.style.backgroundColor = "#F44336";
+      strengthText.textContent = "Password strength: Weak";
+      strengthText.style.color = "#F44336";
+    } else if (strength <= 3) {
+      strengthFill.style.backgroundColor = "#FF9800";
+      strengthText.textContent = "Password strength: Medium";
+      strengthText.style.color = "#FF9800";
+    } else {
+      strengthFill.style.backgroundColor = "#00D084";
+      strengthText.textContent = "Password strength: Strong";
+      strengthText.style.color = "#00D084";
+    }
+  });
+
+  // Save Password
+  savePasswordBtn.addEventListener("click", () => {
+    const currentPassword = document.getElementById("current-password").value;
+    const newPassword = document.getElementById("new-password").value;
+    const confirmPassword = document.getElementById("confirm-password").value;
+
+    // Validate
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      showNotification("Please fill all password fields", "error");
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      showNotification("Password must be at least 8 characters", "error");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      showNotification("Passwords do not match", "error");
+      return;
+    }
+
+    // Disable button to prevent multi-submissions
+    savePasswordBtn.disabled = true;
+    savePasswordBtn.innerHTML =
+      '<i class="fa-solid fa-spinner fa-spin"></i> Updating...';
+
+    const formData = new FormData();
+    formData.append("currentPassword", currentPassword);
+    formData.append("newPassword", newPassword);
+
+    fetch("/api/change_password/", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((data) => {
+            throw new Error(data.error || "Failed to update password");
+          });
         }
-    });
-
-    // Save Password
-    savePasswordBtn.addEventListener('click', () => {
-        const currentPassword = document.getElementById('current-password').value;
-        const newPassword = document.getElementById('new-password').value;
-        const confirmPassword = document.getElementById('confirm-password').value;
-
-        // Validate
-        if (!currentPassword || !newPassword || !confirmPassword) {
-            showNotification('Please fill all password fields', 'error');
-            return;
-        }
-
-        if (newPassword.length < 8) {
-            showNotification('Password must be at least 8 characters', 'error');
-            return;
-        }
-
-        if (newPassword !== confirmPassword) {
-            showNotification('Passwords do not match', 'error');
-            return;
-        }
-
-        // TODO: Verify current password and update
-        console.log('Password updated');
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Password updated");
 
         // Hide form
-        passwordForm.style.display = 'none';
+        passwordForm.style.display = "none";
         changePasswordBtn.innerHTML = '<i class="fa-solid fa-key"></i> Change';
         clearPasswordFields();
 
-        showNotification('Password updated successfully!');
-    });
+        showNotification("Password updated successfully!");
+      })
+      .catch((error) => {
+        showNotification(error.message, "error");
+        console.error(error);
+      })
+      .finally(() => {
+        savePasswordBtn.disabled = false;
+        savePasswordBtn.innerHTML =
+          '<i class="fa-solid fa-check"></i> Update Password';
+      });
+  });
 
-    // Toggle Password Visibility
-    function togglePasswordVisibility(inputId) {
-        const input = document.getElementById(inputId);
-        const icon = input.nextElementSibling;
+  // Toggle Password Visibility
+  function togglePasswordVisibility(inputId) {
+    const input = document.getElementById(inputId);
+    const icon = input.nextElementSibling;
 
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            input.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    } else {
+      input.type = "password";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
     }
+  }
 
-    // Notification Toggles
-    document.getElementById('email-notifications').addEventListener('change', function () {
-        const status = this.checked ? 'enabled' : 'disabled';
-        console.log('Email notifications:', status);
-        showNotification(`Email notifications ${status}`);
+  // Notification Toggles
+  document
+    .getElementById("email-notifications")
+    .addEventListener("change", function () {
+      const status = this.checked ? "enabled" : "disabled";
+      console.log("Email notifications:", status);
+      showNotification(`Email notifications ${status}`);
     });
 
-    document.getElementById('push-notifications').addEventListener('change', function () {
-        const status = this.checked ? 'enabled' : 'disabled';
-        console.log('Push notifications:', status);
-        showNotification(`Push notifications ${status}`);
+  document
+    .getElementById("push-notifications")
+    .addEventListener("change", function () {
+      const status = this.checked ? "enabled" : "disabled";
+      console.log("Push notifications:", status);
+      showNotification(`Push notifications ${status}`);
     });
 
-    document.getElementById('threat-alerts').addEventListener('change', function () {
-        const status = this.checked ? 'enabled' : 'disabled';
-        console.log('Threat alerts:', status);
-        showNotification(`Threat alerts ${status}`);
+  document
+    .getElementById("threat-alerts")
+    .addEventListener("change", function () {
+      const status = this.checked ? "enabled" : "disabled";
+      console.log("Threat alerts:", status);
+      showNotification(`Threat alerts ${status}`);
     });
 
-    document.getElementById('weekly-reports').addEventListener('change', function () {
-        const status = this.checked ? 'enabled' : 'disabled';
-        console.log('Weekly reports:', status);
-        showNotification(`Weekly reports ${status}`);
+  document
+    .getElementById("weekly-reports")
+    .addEventListener("change", function () {
+      const status = this.checked ? "enabled" : "disabled";
+      console.log("Weekly reports:", status);
+      showNotification(`Weekly reports ${status}`);
     });
 
-    // Privacy Toggles
-    document.getElementById('anonymous-default').addEventListener('change', function () {
-        const status = this.checked ? 'enabled' : 'disabled';
-        console.log('Anonymous reporting by default:', status);
-        showNotification(`Anonymous reporting ${status}`);
+  // Privacy Toggles
+  document
+    .getElementById("anonymous-default")
+    .addEventListener("change", function () {
+      const status = this.checked ? "enabled" : "disabled";
+      console.log("Anonymous reporting by default:", status);
+      showNotification(`Anonymous reporting ${status}`);
     });
 
-    document.getElementById('share-analytics').addEventListener('change', function () {
-        const status = this.checked ? 'enabled' : 'disabled';
-        console.log('Share analytics:', status);
-        showNotification(`Analytics sharing ${status}`);
+  document
+    .getElementById("share-analytics")
+    .addEventListener("change", function () {
+      const status = this.checked ? "enabled" : "disabled";
+      console.log("Share analytics:", status);
+      showNotification(`Analytics sharing ${status}`);
     });
 
-    // Two-Factor Authentication
-    document.getElementById('two-factor-toggle').addEventListener('change', function () {
-        if (this.checked) {
-            // Show setup instructions
-            const setup = confirm('Two-Factor Authentication will be enabled. You will need to scan a QR code with your authenticator app. Continue?');
-            if (setup) {
-                console.log('Setting up 2FA...');
-                showNotification('Two-Factor Authentication setup initiated');
-            } else {
-                this.checked = false;
-            }
+  // Two-Factor Authentication
+  document
+    .getElementById("two-factor-toggle")
+    .addEventListener("change", function () {
+      if (this.checked) {
+        // Show setup instructions
+        const setup = confirm(
+          "Two-Factor Authentication will be enabled. You will need to scan a QR code with your authenticator app. Continue?",
+        );
+        if (setup) {
+          console.log("Setting up 2FA...");
+          showNotification("Two-Factor Authentication setup initiated");
         } else {
-            const disable = confirm('Are you sure you want to disable Two-Factor Authentication? This will make your account less secure.');
-            if (disable) {
-                console.log('2FA disabled');
-                showNotification('Two-Factor Authentication disabled');
-            } else {
-                this.checked = true;
-            }
+          this.checked = false;
         }
-    });
-
-    // App Settings
-    document.getElementById('language-select').addEventListener('change', function () {
-        const language = this.value;
-        console.log('Language changed to:', language);
-        showNotification('Language preference saved');
-        // TODO: Implement language change
-    });
-
-    document.getElementById('theme-select').addEventListener('change', function () {
-        const theme = this.value;
-        console.log('Theme changed to:', theme);
-        showNotification('Theme preference saved');
-        // TODO: Implement theme change
-    });
-
-    document.getElementById('auto-scan').addEventListener('change', function () {
-        const status = this.checked ? 'enabled' : 'disabled';
-        console.log('Auto-scan links:', status);
-        showNotification(`Auto-scan ${status}`);
-    });
-
-    // Clear Cache
-    clearCacheBtn.addEventListener('click', () => {
-        const confirm = window.confirm('Clear all cached data? This will free up space but may slow down the app temporarily.');
-
-        if (confirm) {
-            // TODO: Clear cache
-            console.log('Cache cleared');
-            showNotification('Cache cleared successfully!');
-        }
-    });
-
-    // Download Data
-    downloadDataBtn.addEventListener('click', () => {
-        // Simulate data export
-        const userData = {
-            profile: {
-                name: document.getElementById('display-name').textContent,
-                email: document.getElementById('display-email').textContent,
-                userType: document.getElementById('display-user-type').textContent
-            },
-            stats: {
-                totalScans: 24,
-                threatsDetected: 8,
-                reportsSubmitted: 3
-            },
-            exportDate: new Date().toISOString()
-        };
-
-        // Create and download JSON file
-        const dataStr = JSON.stringify(userData, null, 2);
-        const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(dataBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'cybersense-data-export.json';
-        link.click();
-
-        showNotification('Data exported successfully!');
-    });
-
-    // Delete Account
-    deleteAccountBtn.addEventListener('click', async () => {
-        const confirmDelete = window.confirm('Are you ABSOLUTELY sure? This action cannot be undone and all your data will be permanently lost.');
-
-        if (confirmDelete) {
-            try {
-                const res = await fetch('/api/delete_account/', { method: 'POST' });
-                if (!res.ok) throw new Error('Account deletion failed');
-                console.log('User account deleted');
-                showNotification('Account deleting...', 'success');
-                setTimeout(() => {
-                    window.location.href = '/accounts/login/';
-                }, 1000);
-            } catch (e) {
-                console.warn(e);
-                showNotification('Failed to delete account', 'error');
-            }
+      } else {
+        const disable = confirm(
+          "Are you sure you want to disable Two-Factor Authentication? This will make your account less secure.",
+        );
+        if (disable) {
+          console.log("2FA disabled");
+          showNotification("Two-Factor Authentication disabled");
         } else {
-            console.log('Account deletion cancelled');
-            showNotification('Account deletion cancelled');
+          this.checked = true;
         }
+      }
     });
 
-    // Logout
-    logoutBtn.addEventListener('click', () => {
-        const confirmLogout = window.confirm('Are you sure you want to logout?');
-
-        if (confirmLogout) {
-            showNotification('Logging out...');
-            window.location.href = '/accounts/logout/';
-        }
+  // App Settings
+  document
+    .getElementById("language-select")
+    .addEventListener("change", function () {
+      const language = this.value;
+      console.log("Language changed to:", language);
+      showNotification("Language preference saved");
+      // TODO: Implement language change
     });
 
-    // Show Notification
-    function showNotification(message, type = 'success') {
-        const toast = document.createElement('div');
-        toast.style.cssText = `
+  document
+    .getElementById("theme-select")
+    .addEventListener("change", function () {
+      const theme = this.value;
+      console.log("Theme changed to:", theme);
+      showNotification("Theme preference saved");
+      // TODO: Implement theme change
+    });
+
+  document.getElementById("auto-scan").addEventListener("change", function () {
+    const status = this.checked ? "enabled" : "disabled";
+    console.log("Auto-scan links:", status);
+    showNotification(`Auto-scan ${status}`);
+  });
+
+  // Clear Cache
+  clearCacheBtn.addEventListener("click", () => {
+    const confirm = window.confirm(
+      "Clear all cached data? This will free up space but may slow down the app temporarily.",
+    );
+
+    if (confirm) {
+      // TODO: Clear cache
+      console.log("Cache cleared");
+      showNotification("Cache cleared successfully!");
+    }
+  });
+
+  // Download Data
+  downloadDataBtn.addEventListener("click", () => {
+    // Simulate data export
+    const userData = {
+      profile: {
+        name: document.getElementById("display-name").textContent,
+        email: document.getElementById("display-email").textContent,
+        userType: document.getElementById("display-user-type").textContent,
+      },
+      stats: {
+        totalScans: 24,
+        threatsDetected: 8,
+        reportsSubmitted: 3,
+      },
+      exportDate: new Date().toISOString(),
+    };
+
+    // Create and download JSON file
+    const dataStr = JSON.stringify(userData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "cybersense-data-export.json";
+    link.click();
+
+    showNotification("Data exported successfully!");
+  });
+
+  // Delete Account
+  deleteAccountBtn.addEventListener("click", async () => {
+    const confirmDelete = window.confirm(
+      "Are you ABSOLUTELY sure? This action cannot be undone and all your data will be permanently lost.",
+    );
+
+    if (confirmDelete) {
+      try {
+        const res = await fetch("/api/delete_account/", { method: "POST" });
+        if (!res.ok) throw new Error("Account deletion failed");
+        console.log("User account deleted");
+        showNotification("Account deleting...", "success");
+        setTimeout(() => {
+          window.location.href = "/accounts/login/";
+        }, 1000);
+      } catch (e) {
+        console.warn(e);
+        showNotification("Failed to delete account", "error");
+      }
+    } else {
+      console.log("Account deletion cancelled");
+      showNotification("Account deletion cancelled");
+    }
+  });
+
+  // Logout
+  logoutBtn.addEventListener("click", () => {
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
+
+    if (confirmLogout) {
+      showNotification("Logging out...");
+      window.location.href = "/accounts/logout/";
+    }
+  });
+
+  // Show Notification
+  function showNotification(message, type = "success") {
+    const toast = document.createElement("div");
+    toast.style.cssText = `
         position: fixed;
         top: 80px;
         right: 20px;
-        background: ${type === 'success' ? '#00D084' : '#F44336'};
+        background: ${type === "success" ? "#00D084" : "#F44336"};
         color: white;
         padding: 12px 20px;
         border-radius: 8px;
@@ -741,18 +867,18 @@
         font-weight: 600;
         max-width: 300px;
     `;
-        toast.textContent = message;
-        document.body.appendChild(toast);
+    toast.textContent = message;
+    document.body.appendChild(toast);
 
-        setTimeout(() => {
-            toast.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
-    }
+    setTimeout(() => {
+      toast.style.animation = "slideOut 0.3s ease";
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
 
-    // Add CSS animations
-    const style = document.createElement('style');
-    style.textContent = `
+  // Add CSS animations
+  const style = document.createElement("style");
+  style.textContent = `
     @keyframes slideIn {
         from {
             transform: translateX(100%);
@@ -775,95 +901,100 @@
         }
     }
 `;
-    document.head.appendChild(style);
+  document.head.appendChild(style);
 
-    // Save settings to localStorage
-    function saveSettings() {
-        const settings = {
-            notifications: {
-                email: document.getElementById('email-notifications').checked,
-                push: document.getElementById('push-notifications').checked,
-                threats: document.getElementById('threat-alerts').checked,
-                weekly: document.getElementById('weekly-reports').checked
-            },
-            privacy: {
-                anonymous: document.getElementById('anonymous-default').checked,
-                analytics: document.getElementById('share-analytics').checked
-            },
-            app: {
-                language: document.getElementById('language-select').value,
-                theme: document.getElementById('theme-select').value,
-                autoScan: document.getElementById('auto-scan').checked
-            }
-        };
+  // Save settings to localStorage
+  function saveSettings() {
+    const settings = {
+      notifications: {
+        email: document.getElementById("email-notifications").checked,
+        push: document.getElementById("push-notifications").checked,
+        threats: document.getElementById("threat-alerts").checked,
+        weekly: document.getElementById("weekly-reports").checked,
+      },
+      privacy: {
+        anonymous: document.getElementById("anonymous-default").checked,
+        analytics: document.getElementById("share-analytics").checked,
+      },
+      app: {
+        language: document.getElementById("language-select").value,
+        theme: document.getElementById("theme-select").value,
+        autoScan: document.getElementById("auto-scan").checked,
+      },
+    };
 
-        localStorage.setItem('cybersense-settings', JSON.stringify(settings));
-        console.log('Settings saved to localStorage');
+    localStorage.setItem("cybersense-settings", JSON.stringify(settings));
+    console.log("Settings saved to localStorage");
+  }
+
+  // Load settings from localStorage
+  function loadSettings() {
+    const savedSettings = localStorage.getItem("cybersense-settings");
+
+    if (savedSettings) {
+      const settings = JSON.parse(savedSettings);
+
+      // Apply notifications settings
+      document.getElementById("email-notifications").checked =
+        settings.notifications.email;
+      document.getElementById("push-notifications").checked =
+        settings.notifications.push;
+      document.getElementById("threat-alerts").checked =
+        settings.notifications.threats;
+      document.getElementById("weekly-reports").checked =
+        settings.notifications.weekly;
+
+      // Apply privacy settings
+      document.getElementById("anonymous-default").checked =
+        settings.privacy.anonymous;
+      document.getElementById("share-analytics").checked =
+        settings.privacy.analytics;
+
+      // Apply app settings
+      document.getElementById("language-select").value = settings.app.language;
+      document.getElementById("theme-select").value = settings.app.theme;
+      document.getElementById("auto-scan").checked = settings.app.autoScan;
+
+      console.log("Settings loaded from localStorage");
+    }
+  }
+
+  // Auto-save settings on change
+  const allToggles = document.querySelectorAll('input[type="checkbox"]');
+  const allSelects = document.querySelectorAll("select");
+
+  allToggles.forEach((toggle) => {
+    toggle.addEventListener("change", saveSettings);
+  });
+
+  allSelects.forEach((select) => {
+    select.addEventListener("change", saveSettings);
+  });
+
+  // Load settings on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    loadSettings();
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener("keydown", (e) => {
+    // Ctrl/Cmd + S to save profile
+    if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+      e.preventDefault();
+      if (editProfileForm.style.display !== "none") {
+        saveProfileBtn.click();
+      }
     }
 
-    // Load settings from localStorage
-    function loadSettings() {
-        const savedSettings = localStorage.getItem('cybersense-settings');
-
-        if (savedSettings) {
-            const settings = JSON.parse(savedSettings);
-
-            // Apply notifications settings
-            document.getElementById('email-notifications').checked = settings.notifications.email;
-            document.getElementById('push-notifications').checked = settings.notifications.push;
-            document.getElementById('threat-alerts').checked = settings.notifications.threats;
-            document.getElementById('weekly-reports').checked = settings.notifications.weekly;
-
-            // Apply privacy settings
-            document.getElementById('anonymous-default').checked = settings.privacy.anonymous;
-            document.getElementById('share-analytics').checked = settings.privacy.analytics;
-
-            // Apply app settings
-            document.getElementById('language-select').value = settings.app.language;
-            document.getElementById('theme-select').value = settings.app.theme;
-            document.getElementById('auto-scan').checked = settings.app.autoScan;
-
-            console.log('Settings loaded from localStorage');
-        }
+    // Escape to cancel forms
+    if (e.key === "Escape") {
+      if (editProfileForm.style.display !== "none") {
+        cancelEditBtn.click();
+      }
+      if (passwordForm.style.display !== "none") {
+        cancelPasswordBtn.click();
+      }
     }
-
-    // Auto-save settings on change
-    const allToggles = document.querySelectorAll('input[type="checkbox"]');
-    const allSelects = document.querySelectorAll('select');
-
-    allToggles.forEach(toggle => {
-        toggle.addEventListener('change', saveSettings);
-    });
-
-    allSelects.forEach(select => {
-        select.addEventListener('change', saveSettings);
-    });
-
-    // Load settings on page load
-    document.addEventListener('DOMContentLoaded', () => {
-        loadSettings();
-    });
-
-    // Keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-        // Ctrl/Cmd + S to save profile
-        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-            e.preventDefault();
-            if (editProfileForm.style.display !== 'none') {
-                saveProfileBtn.click();
-            }
-        }
-
-        // Escape to cancel forms
-        if (e.key === 'Escape') {
-            if (editProfileForm.style.display !== 'none') {
-                cancelEditBtn.click();
-            }
-            if (passwordForm.style.display !== 'none') {
-                cancelPasswordBtn.click();
-            }
-        }
-    });
-
+  });
 </script>
 {% endblock %}

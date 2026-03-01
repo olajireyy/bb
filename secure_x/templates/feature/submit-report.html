@@ -1,591 +1,633 @@
-{% extends 'core/base.html' %}
-{% block content %}
-{% load static %}
+{% extends 'core/base.html' %} {% block content %} {% load static %}
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberSense Hub - Submit Report</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyberSense Hub - Submit Report</title>
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
 
-    <!-- Submit Report CSS -->
-    <link rel="stylesheet" href="{% static 'css/submit-report.css' %}">
+  <!-- Submit Report CSS -->
+  <link rel="stylesheet" href="{% static 'css/submit-report.css' %}" />
 </head>
 
 <!-- Top Header -->
 <header class="top-header">
-    <div class="header-content">
-        <a href="/reports/" class="back-btn">
-            <i class="fa-solid fa-arrow-left"></i>
-        </a>
-        <div class="logo">
-            <i class="fa-solid fa-shield-halved"></i>
-            <h1>Cyber<span>Sense</span> HUB</h1>
-        </div>
-        <div class="header-spacer"></div>
+  <div class="header-content">
+    <a href="/reports/" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div class="logo">
+      <i class="fa-solid fa-shield-halved"></i>
+      <h1>Cyber<span>Sense</span> HUB</h1>
     </div>
+    <div class="header-spacer"></div>
+  </div>
 </header>
 
 <!-- Main Content -->
 <main class="submit-container">
-    <!-- Page Title -->
-    <div class="page-title">
-        <h2>Submit Security Report</h2>
-        <p>Help keep our campus safe</p>
+  <!-- Page Title -->
+  <div class="page-title">
+    <h2>Submit Security Report</h2>
+    <p>Help keep our campus safe</p>
+  </div>
+
+  <!-- Info Banner -->
+  <div class="info-banner">
+    <i class="fa-solid fa-shield-check"></i>
+    <div>
+      <p>
+        <strong>Your report helps protect the community.</strong> All reports
+        are reviewed by our security team and appropriate action will be taken.
+      </p>
+    </div>
+  </div>
+
+  <!-- Report Form -->
+  <form class="report-form" id="report-form">
+    <!-- Incident Type -->
+    <div class="form-group">
+      <label for="incident-type">
+        <i class="fa-solid fa-list"></i> Incident Type *
+      </label>
+      <select id="incident-type" required>
+        <option value="">Select incident type</option>
+        <option value="scam">Scam / Fraud</option>
+        <option value="phishing">Phishing Email</option>
+        <option value="cyberbullying">Cyberbullying</option>
+        <option value="hacking">Account Hacking</option>
+        <option value="impersonation">Impersonation</option>
+        <option value="fake-job">Fake Job Offer</option>
+        <option value="fake-scholarship">Fake Scholarship</option>
+        <option value="data-breach">Data Breach</option>
+        <option value="malware">Malware / Virus</option>
+        <option value="other">Other</option>
+      </select>
     </div>
 
-    <!-- Info Banner -->
-    <div class="info-banner">
-        <i class="fa-solid fa-shield-check"></i>
+    <!-- Priority Level -->
+    <div class="form-group">
+      <label for="priority">
+        <i class="fa-solid fa-flag"></i> Priority Level *
+      </label>
+      <select id="priority" required>
+        <option value="">Select priority</option>
+        <option value="high">High - Immediate threat</option>
+        <option value="medium">Medium - Concerning issue</option>
+        <option value="low">Low - General awareness</option>
+      </select>
+    </div>
+
+    <!-- Title -->
+    <div class="form-group">
+      <label for="title">
+        <i class="fa-solid fa-heading"></i> Report Title *
+      </label>
+      <input
+        type="text"
+        id="title"
+        placeholder="Brief description of the incident"
+        maxlength="100"
+        required
+      />
+      <span class="char-count" id="title-count">0/100</span>
+    </div>
+
+    <!-- Description -->
+    <div class="form-group">
+      <label for="description">
+        <i class="fa-solid fa-align-left"></i> Detailed Description *
+      </label>
+      <textarea
+        id="description"
+        rows="6"
+        placeholder="Provide detailed information about what happened, when it occurred, who was involved, and any other relevant details..."
+        maxlength="1000"
+        required
+      ></textarea>
+      <span class="char-count" id="description-count">0/1000</span>
+    </div>
+
+    <!-- Contact Information (Optional) -->
+    <div class="form-group">
+      <label for="contact">
+        <i class="fa-solid fa-envelope"></i> Contact Email (Optional)
+      </label>
+      <input type="email" id="contact" placeholder="your.email@example.com" />
+      <p class="form-hint">
+        Provide your email if you want to receive updates about this report
+      </p>
+    </div>
+
+    <!-- Evidence Upload -->
+    <div class="form-group">
+      <label> <i class="fa-solid fa-paperclip"></i> Evidence (Optional) </label>
+      <div class="upload-area" id="upload-area">
+        <input
+          type="file"
+          id="file-input"
+          accept="image/*,.pdf"
+          multiple
+          hidden
+        />
+        <div class="upload-content">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <p><strong>Click to upload</strong> or drag and drop</p>
+          <p class="upload-hint">
+            Screenshots, PDFs, or images (Max 5 files, 5MB each)
+          </p>
+        </div>
+      </div>
+
+      <!-- File List -->
+      <div class="file-list" id="file-list"></div>
+    </div>
+
+    <!-- Anonymous Reporting -->
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input type="checkbox" id="anonymous" />
+        <span>
+          <i class="fa-solid fa-user-secret"></i> Submit anonymously
+          <small>Your identity will not be recorded or shared</small>
+        </span>
+      </label>
+    </div>
+
+    <!-- Location (Campus) -->
+    <div class="form-group">
+      <label for="campus">
+        <i class="fa-solid fa-building-columns"></i> Campus / Location *
+      </label>
+      <select id="campus" required>
+        <option value="">Select your campus</option>
+        <option value="unilag">University of Lagos</option>
+        <option value="covenant">Covenant University</option>
+        <option value="oau">Obafemi Awolowo University</option>
+        <option value="ui">University of Ibadan</option>
+        <option value="abu">Ahmadu Bello University</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <!-- Terms and Conditions -->
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input type="checkbox" id="terms" required />
+        <span>
+          I confirm that the information provided is accurate and I understand
+          that false reports may have consequences *
+        </span>
+      </label>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn-submit">
+      <i class="fa-solid fa-paper-plane"></i>
+      <span>Submit Report</span>
+    </button>
+
+    <!-- Cancel Button -->
+    <button type="button" class="btn-cancel" onclick="history.back()">
+      <i class="fa-solid fa-xmark"></i>
+      <span>Cancel</span>
+    </button>
+  </form>
+
+  <!-- Guidelines Section -->
+  <div class="guidelines-section">
+    <h3><i class="fa-solid fa-circle-info"></i> Reporting Guidelines</h3>
+    <div class="guidelines-list">
+      <div class="guideline-item">
+        <i class="fa-solid fa-check-circle"></i>
         <div>
-            <p><strong>Your report helps protect the community.</strong> All reports are reviewed by our security team
-                and appropriate action will be taken.</p>
+          <h4>Be Specific</h4>
+          <p>Provide as much detail as possible about the incident</p>
         </div>
-    </div>
+      </div>
 
-    <!-- Report Form -->
-    <form class="report-form" id="report-form">
-        <!-- Incident Type -->
-        <div class="form-group">
-            <label for="incident-type">
-                <i class="fa-solid fa-list"></i> Incident Type *
-            </label>
-            <select id="incident-type" required>
-                <option value="">Select incident type</option>
-                <option value="scam">Scam / Fraud</option>
-                <option value="phishing">Phishing Email</option>
-                <option value="cyberbullying">Cyberbullying</option>
-                <option value="hacking">Account Hacking</option>
-                <option value="impersonation">Impersonation</option>
-                <option value="fake-job">Fake Job Offer</option>
-                <option value="fake-scholarship">Fake Scholarship</option>
-                <option value="data-breach">Data Breach</option>
-                <option value="malware">Malware / Virus</option>
-                <option value="other">Other</option>
-            </select>
-        </div>
-
-        <!-- Priority Level -->
-        <div class="form-group">
-            <label for="priority">
-                <i class="fa-solid fa-flag"></i> Priority Level *
-            </label>
-            <select id="priority" required>
-                <option value="">Select priority</option>
-                <option value="high">High - Immediate threat</option>
-                <option value="medium">Medium - Concerning issue</option>
-                <option value="low">Low - General awareness</option>
-            </select>
-        </div>
-
-        <!-- Title -->
-        <div class="form-group">
-            <label for="title">
-                <i class="fa-solid fa-heading"></i> Report Title *
-            </label>
-            <input type="text" id="title" placeholder="Brief description of the incident" maxlength="100" required />
-            <span class="char-count" id="title-count">0/100</span>
-        </div>
-
-        <!-- Description -->
-        <div class="form-group">
-            <label for="description">
-                <i class="fa-solid fa-align-left"></i> Detailed Description *
-            </label>
-            <textarea id="description" rows="6"
-                placeholder="Provide detailed information about what happened, when it occurred, who was involved, and any other relevant details..."
-                maxlength="1000" required></textarea>
-            <span class="char-count" id="description-count">0/1000</span>
-        </div>
-
-        <!-- Contact Information (Optional) -->
-        <div class="form-group">
-            <label for="contact">
-                <i class="fa-solid fa-envelope"></i> Contact Email (Optional)
-            </label>
-            <input type="email" id="contact" placeholder="your.email@example.com" />
-            <p class="form-hint">Provide your email if you want to receive updates about this report</p>
-        </div>
-
-        <!-- Evidence Upload -->
-        <div class="form-group">
-            <label>
-                <i class="fa-solid fa-paperclip"></i> Evidence (Optional)
-            </label>
-            <div class="upload-area" id="upload-area">
-                <input type="file" id="file-input" accept="image/*,.pdf" multiple hidden>
-                <div class="upload-content">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
-                    <p><strong>Click to upload</strong> or drag and drop</p>
-                    <p class="upload-hint">Screenshots, PDFs, or images (Max 5 files, 5MB each)</p>
-                </div>
-            </div>
-
-            <!-- File List -->
-            <div class="file-list" id="file-list"></div>
-        </div>
-
-        <!-- Anonymous Reporting -->
-        <div class="form-group">
-            <label class="checkbox-label">
-                <input type="checkbox" id="anonymous">
-                <span>
-                    <i class="fa-solid fa-user-secret"></i> Submit anonymously
-                    <small>Your identity will not be recorded or shared</small>
-                </span>
-            </label>
-        </div>
-
-        <!-- Location (Campus) -->
-        <div class="form-group">
-            <label for="campus">
-                <i class="fa-solid fa-building-columns"></i> Campus / Location *
-            </label>
-            <select id="campus" required>
-                <option value="">Select your campus</option>
-                <option value="unilag">University of Lagos</option>
-                <option value="covenant">Covenant University</option>
-                <option value="oau">Obafemi Awolowo University</option>
-                <option value="ui">University of Ibadan</option>
-                <option value="abu">Ahmadu Bello University</option>
-                <option value="other">Other</option>
-            </select>
-        </div>
-
-        <!-- Terms and Conditions -->
-        <div class="form-group">
-            <label class="checkbox-label">
-                <input type="checkbox" id="terms" required>
-                <span>
-                    I confirm that the information provided is accurate and I understand that false reports may have
-                    consequences *
-                </span>
-            </label>
-        </div>
-
-        <!-- Submit Button -->
-        <button type="submit" class="btn-submit">
-            <i class="fa-solid fa-paper-plane"></i>
-            <span>Submit Report</span>
-        </button>
-
-        <!-- Cancel Button -->
-        <button type="button" class="btn-cancel" onclick="history.back()">
-            <i class="fa-solid fa-xmark"></i>
-            <span>Cancel</span>
-        </button>
-    </form>
-
-    <!-- Guidelines Section -->
-    <div class="guidelines-section">
-        <h3><i class="fa-solid fa-circle-info"></i> Reporting Guidelines</h3>
-        <div class="guidelines-list">
-            <div class="guideline-item">
-                <i class="fa-solid fa-check-circle"></i>
-                <div>
-                    <h4>Be Specific</h4>
-                    <p>Provide as much detail as possible about the incident</p>
-                </div>
-            </div>
-
-            <div class="guideline-item">
-                <i class="fa-solid fa-check-circle"></i>
-                <div>
-                    <h4>Include Evidence</h4>
-                    <p>Screenshots, emails, or messages help our investigation</p>
-                </div>
-            </div>
-
-            <div class="guideline-item">
-                <i class="fa-solid fa-check-circle"></i>
-                <div>
-                    <h4>Be Truthful</h4>
-                    <p>Only report genuine incidents - false reports harm everyone</p>
-                </div>
-            </div>
-
-            <div class="guideline-item">
-                <i class="fa-solid fa-check-circle"></i>
-                <div>
-                    <h4>Stay Safe</h4>
-                    <p>Don't engage with scammers or click suspicious links</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- What Happens Next -->
-    <div class="process-section">
-        <h3><i class="fa-solid fa-timeline"></i> What Happens Next?</h3>
-        <div class="process-steps">
-            <div class="process-step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h4>Report Received</h4>
-                    <p>Your report is immediately logged in our system</p>
-                </div>
-            </div>
-
-            <div class="process-step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h4>Review & Investigation</h4>
-                    <p>Our security team reviews the report within 24 hours</p>
-                </div>
-            </div>
-
-            <div class="process-step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h4>Action Taken</h4>
-                    <p>Appropriate measures are taken to address the threat</p>
-                </div>
-            </div>
-
-            <div class="process-step">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <h4>Community Alert</h4>
-                    <p>If needed, we alert the campus community</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Emergency Contact -->
-    <div class="emergency-contact">
-        <i class="fa-solid fa-phone"></i>
+      <div class="guideline-item">
+        <i class="fa-solid fa-check-circle"></i>
         <div>
-            <h4>Emergency Contact</h4>
-            <p>For urgent security threats, call campus security immediately at <strong>0800-SECURITY</strong></p>
+          <h4>Include Evidence</h4>
+          <p>Screenshots, emails, or messages help our investigation</p>
         </div>
-    </div>
+      </div>
 
-    <!-- Bottom Spacer -->
-    <div class="bottom-spacer"></div>
+      <div class="guideline-item">
+        <i class="fa-solid fa-check-circle"></i>
+        <div>
+          <h4>Be Truthful</h4>
+          <p>Only report genuine incidents - false reports harm everyone</p>
+        </div>
+      </div>
+
+      <div class="guideline-item">
+        <i class="fa-solid fa-check-circle"></i>
+        <div>
+          <h4>Stay Safe</h4>
+          <p>Don't engage with scammers or click suspicious links</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What Happens Next -->
+  <div class="process-section">
+    <h3><i class="fa-solid fa-timeline"></i> What Happens Next?</h3>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Report Received</h4>
+          <p>Your report is immediately logged in our system</p>
+        </div>
+      </div>
+
+      <div class="process-step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Review & Investigation</h4>
+          <p>Our security team reviews the report within 24 hours</p>
+        </div>
+      </div>
+
+      <div class="process-step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Action Taken</h4>
+          <p>Appropriate measures are taken to address the threat</p>
+        </div>
+      </div>
+
+      <div class="process-step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>Community Alert</h4>
+          <p>If needed, we alert the campus community</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Emergency Contact -->
+  <div class="emergency-contact">
+    <i class="fa-solid fa-phone"></i>
+    <div>
+      <h4>Emergency Contact</h4>
+      <p>
+        For urgent security threats, call campus security immediately at
+        <strong>0800-SECURITY</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- Bottom Spacer -->
+  <div class="bottom-spacer"></div>
 </main>
 
 <!-- Success Modal (Hidden by default) -->
-<div class="modal" id="success-modal" style="display: none;">
-    <div class="modal-content success">
-        <div class="modal-icon">
-            <i class="fa-solid fa-circle-check"></i>
-        </div>
-        <h3>Report Submitted Successfully!</h3>
-        <p>Thank you for helping keep our campus safe. Your report has been received and will be reviewed by our
-            security team.</p>
-        <p class="report-id">Report ID: <strong id="generated-report-id">#REP-2024-XXX</strong></p>
-        <div class="modal-actions">
-            <button class="btn-primary" onclick="location.href='/reports/'">
-                View Reports
-            </button>
-            <button class="btn-secondary" onclick="location.href='/dashboard/'">
-                Go to Dashboard
-            </button>
-        </div>
+<div class="modal" id="success-modal" style="display: none">
+  <div class="modal-content success">
+    <div class="modal-icon">
+      <i class="fa-solid fa-circle-check"></i>
     </div>
+    <h3>Report Submitted Successfully!</h3>
+    <p>
+      Thank you for helping keep our campus safe. Your report has been received
+      and will be reviewed by our security team.
+    </p>
+    <p class="report-id">
+      Report ID: <strong id="generated-report-id">#REP-2024-XXX</strong>
+    </p>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="location.href = '/reports/'">
+        View Reports
+      </button>
+      <button class="btn-secondary" onclick="location.href = '/dashboard/'">
+        Go to Dashboard
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- Bottom Navigation -->
 
-
 <!-- JavaScript -->
 <script>
-    // Elements
-    const reportForm = document.getElementById('report-form');
-    const titleInput = document.getElementById('title');
-    const descriptionInput = document.getElementById('description');
-    const titleCount = document.getElementById('title-count');
-    const descriptionCount = document.getElementById('description-count');
-    const uploadArea = document.getElementById('upload-area');
-    const fileInput = document.getElementById('file-input');
-    const fileList = document.getElementById('file-list');
-    const successModal = document.getElementById('success-modal');
-    const anonymousCheckbox = document.getElementById('anonymous');
-    const contactInput = document.getElementById('contact');
+  // Elements
+  const reportForm = document.getElementById("report-form");
+  const titleInput = document.getElementById("title");
+  const descriptionInput = document.getElementById("description");
+  const titleCount = document.getElementById("title-count");
+  const descriptionCount = document.getElementById("description-count");
+  const uploadArea = document.getElementById("upload-area");
+  const fileInput = document.getElementById("file-input");
+  const fileList = document.getElementById("file-list");
+  const successModal = document.getElementById("success-modal");
+  const anonymousCheckbox = document.getElementById("anonymous");
+  const contactInput = document.getElementById("contact");
 
-    // File storage
-    let uploadedFiles = [];
+  // File storage
+  let uploadedFiles = [];
 
-    // Character Counter for Title
-    titleInput.addEventListener('input', () => {
-        const length = titleInput.value.length;
-        titleCount.textContent = `${length}/100`;
+  // Character Counter for Title
+  titleInput.addEventListener("input", () => {
+    const length = titleInput.value.length;
+    titleCount.textContent = `${length}/100`;
 
-        if (length > 90) {
-            titleCount.style.color = '#F44336';
-        } else {
-            titleCount.style.color = '#999';
-        }
-    });
+    if (length > 90) {
+      titleCount.style.color = "#F44336";
+    } else {
+      titleCount.style.color = "#999";
+    }
+  });
 
-    // Character Counter for Description
-    descriptionInput.addEventListener('input', () => {
-        const length = descriptionInput.value.length;
-        descriptionCount.textContent = `${length}/1000`;
+  // Character Counter for Description
+  descriptionInput.addEventListener("input", () => {
+    const length = descriptionInput.value.length;
+    descriptionCount.textContent = `${length}/1000`;
 
-        if (length > 900) {
-            descriptionCount.style.color = '#F44336';
-        } else {
-            descriptionCount.style.color = '#999';
-        }
-    });
+    if (length > 900) {
+      descriptionCount.style.color = "#F44336";
+    } else {
+      descriptionCount.style.color = "#999";
+    }
+  });
 
-    // Upload Area Click
-    uploadArea.addEventListener('click', () => {
-        fileInput.click();
-    });
+  // Upload Area Click
+  uploadArea.addEventListener("click", () => {
+    fileInput.click();
+  });
 
-    // File Input Change
-    fileInput.addEventListener('change', (e) => {
-        const files = Array.from(e.target.files);
-        handleFiles(files);
-    });
+  // File Input Change
+  fileInput.addEventListener("change", (e) => {
+    const files = Array.from(e.target.files);
+    handleFiles(files);
+  });
 
-    // Drag and Drop
-    uploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadArea.classList.add('dragover');
-    });
+  // Drag and Drop
+  uploadArea.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    uploadArea.classList.add("dragover");
+  });
 
-    uploadArea.addEventListener('dragleave', () => {
-        uploadArea.classList.remove('dragover');
-    });
+  uploadArea.addEventListener("dragleave", () => {
+    uploadArea.classList.remove("dragover");
+  });
 
-    uploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadArea.classList.remove('dragover');
+  uploadArea.addEventListener("drop", (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove("dragover");
 
-        const files = Array.from(e.dataTransfer.files);
-        handleFiles(files);
-    });
+    const files = Array.from(e.dataTransfer.files);
+    handleFiles(files);
+  });
 
-    // Handle Files
-    function handleFiles(files) {
-        // Check if total files exceed 5
-        if (uploadedFiles.length + files.length > 5) {
-            alert('Maximum 5 files allowed!');
-            return;
-        }
-
-        files.forEach(file => {
-            // Check file size (5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                alert(`File "${file.name}" is too large. Maximum size is 5MB.`);
-                return;
-            }
-
-            // Check file type
-            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
-            if (!validTypes.includes(file.type)) {
-                alert(`File "${file.name}" is not a valid type. Only images and PDFs are allowed.`);
-                return;
-            }
-
-            // Add to uploaded files
-            uploadedFiles.push(file);
-            addFileToList(file);
-        });
-
-        // Clear file input
-        fileInput.value = '';
+  // Handle Files
+  function handleFiles(files) {
+    // Check if total files exceed 5
+    if (uploadedFiles.length + files.length > 5) {
+      alert("Maximum 5 files allowed!");
+      return;
     }
 
-    // Add File to List
-    function addFileToList(file) {
-        const fileItem = document.createElement('div');
-        fileItem.className = 'file-item';
+    files.forEach((file) => {
+      // Check file size (5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`File "${file.name}" is too large. Maximum size is 5MB.`);
+        return;
+      }
 
-        const fileInfo = document.createElement('div');
-        fileInfo.className = 'file-info';
+      // Check file type
+      const validTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "application/pdf",
+      ];
+      if (!validTypes.includes(file.type)) {
+        alert(
+          `File "${file.name}" is not a valid type. Only images and PDFs are allowed.`,
+        );
+        return;
+      }
 
-        const icon = document.createElement('i');
-        icon.className = file.type === 'application/pdf' ? 'fa-solid fa-file-pdf' : 'fa-solid fa-image';
-
-        const fileDetails = document.createElement('div');
-
-        const fileName = document.createElement('div');
-        fileName.className = 'file-name';
-        fileName.textContent = file.name;
-
-        const fileSize = document.createElement('div');
-        fileSize.className = 'file-size';
-        fileSize.textContent = formatFileSize(file.size);
-
-        fileDetails.appendChild(fileName);
-        fileDetails.appendChild(fileSize);
-
-        fileInfo.appendChild(icon);
-        fileInfo.appendChild(fileDetails);
-
-        const removeBtn = document.createElement('button');
-        removeBtn.className = 'remove-file';
-        removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-        removeBtn.type = 'button';
-        removeBtn.onclick = () => removeFile(file, fileItem);
-
-        fileItem.appendChild(fileInfo);
-        fileItem.appendChild(removeBtn);
-
-        fileList.appendChild(fileItem);
-    }
-
-    // Remove File
-    function removeFile(file, fileItem) {
-        uploadedFiles = uploadedFiles.filter(f => f !== file);
-        fileItem.remove();
-    }
-
-    // Format File Size
-    function formatFileSize(bytes) {
-        if (bytes < 1024) return bytes + ' B';
-        else if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-        else return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-    }
-
-    // Anonymous Toggle
-    anonymousCheckbox.addEventListener('change', () => {
-        if (anonymousCheckbox.checked) {
-            contactInput.disabled = true;
-            contactInput.value = '';
-            contactInput.placeholder = 'Anonymous reports cannot receive updates';
-        } else {
-            contactInput.disabled = false;
-            contactInput.placeholder = 'your.email@example.com';
-        }
+      // Add to uploaded files
+      uploadedFiles.push(file);
+      addFileToList(file);
     });
 
-    // Form Submission
-    reportForm.addEventListener('submit', (e) => {
-        e.preventDefault();
+    // Clear file input
+    fileInput.value = "";
+  }
 
-        // Get form data
-        const formData = new FormData();
-        formData.append('incidentType', document.getElementById('incident-type').value);
-        formData.append('priority', document.getElementById('priority').value);
-        formData.append('title', titleInput.value);
-        formData.append('description', descriptionInput.value);
-        formData.append('contact', contactInput.value);
-        formData.append('anonymous', anonymousCheckbox.checked);
-        formData.append('campus', document.getElementById('campus').value);
+  // Add File to List
+  function addFileToList(file) {
+    const fileItem = document.createElement("div");
+    fileItem.className = "file-item";
 
-        uploadedFiles.forEach(file => {
-            formData.append('files', file);
-        });
+    const fileInfo = document.createElement("div");
+    fileInfo.className = "file-info";
 
+    const icon = document.createElement("i");
+    icon.className =
+      file.type === "application/pdf" ?
+        "fa-solid fa-file-pdf"
+      : "fa-solid fa-image";
 
-        // Validate
-        if (!formData.incidentType) {
-            alert('Please select an incident type');
-            return;
-        }
+    const fileDetails = document.createElement("div");
 
-        if (!formData.priority) {
-            alert('Please select a priority level');
-            return;
-        }
+    const fileName = document.createElement("div");
+    fileName.className = "file-name";
+    fileName.textContent = file.name;
 
-        if (!formData.title.trim()) {
-            alert('Please enter a report title');
-            return;
-        }
+    const fileSize = document.createElement("div");
+    fileSize.className = "file-size";
+    fileSize.textContent = formatFileSize(file.size);
 
-        if (!formData.description.trim()) {
-            alert('Please provide a detailed description');
-            return;
-        }
+    fileDetails.appendChild(fileName);
+    fileDetails.appendChild(fileSize);
 
-        if (!document.getElementById('campus').value) {
-            alert('Please select your campus');
-            return;
-        }
+    fileInfo.appendChild(icon);
+    fileInfo.appendChild(fileDetails);
 
-        if (!document.getElementById('terms').checked) {
-            alert('Please accept the terms and conditions');
-            return;
-        }
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "remove-file";
+    removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    removeBtn.type = "button";
+    removeBtn.onclick = () => removeFile(file, fileItem);
 
-        // Submit report
-        submitReport(formData);
+    fileItem.appendChild(fileInfo);
+    fileItem.appendChild(removeBtn);
+
+    fileList.appendChild(fileItem);
+  }
+
+  // Remove File
+  function removeFile(file, fileItem) {
+    uploadedFiles = uploadedFiles.filter((f) => f !== file);
+    fileItem.remove();
+  }
+
+  // Format File Size
+  function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + " B";
+    else if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+    else return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+  }
+
+  // Anonymous Toggle
+  anonymousCheckbox.addEventListener("change", () => {
+    if (anonymousCheckbox.checked) {
+      contactInput.disabled = true;
+      contactInput.value = "";
+      contactInput.placeholder = "Anonymous reports cannot receive updates";
+    } else {
+      contactInput.disabled = false;
+      contactInput.placeholder = "your.email@example.com";
+    }
+  });
+
+  // Form Submission
+  reportForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // Get form data
+    const formData = new FormData();
+    formData.append(
+      "incidentType",
+      document.getElementById("incident-type").value,
+    );
+    formData.append("priority", document.getElementById("priority").value);
+    formData.append("title", titleInput.value);
+    formData.append("description", descriptionInput.value);
+    formData.append("contact", contactInput.value);
+    formData.append("anonymous", anonymousCheckbox.checked);
+    formData.append("campus", document.getElementById("campus").value);
+
+    uploadedFiles.forEach((file) => {
+      formData.append("files", file);
     });
 
-    // Submit Report
-    async function submitReport(formData) {
-        // Show loading state
-        const submitBtn = document.querySelector('.btn-submit');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Submitting...</span>';
-
-        try {
-            const response = await fetch('/api/submit_report/', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) throw new Error('Submission failed');
-
-            const data = await response.json();
-
-            // Show success modal
-            showSuccessModal(data.report_id || generateReportId());
-
-            // Reset form
-            reportForm.reset();
-            uploadedFiles = [];
-            fileList.innerHTML = '';
-            titleCount.textContent = '0/100';
-            descriptionCount.textContent = '0/1000';
-
-        } catch (error) {
-            console.error('Error submitting report:', error);
-            showNotification('Error submitting report. Please try again.', 'error');
-        } finally {
-            // Reset button
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span>Submit Report</span>';
-        }
+    // Validate
+    if (!formData.get("incidentType")) {
+      alert("Please select an incident type");
+      return;
     }
 
-    // Generate Report ID
-    function generateReportId() {
-        const year = new Date().getFullYear();
-        const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-        return `REP-${year}-${random}`;
+    if (!formData.get("priority")) {
+      alert("Please select a priority level");
+      return;
     }
 
-    // Show Success Modal
-    function showSuccessModal(reportId) {
-        document.getElementById('generated-report-id').textContent = '#' + reportId;
-        successModal.style.display = 'flex';
-
-        // Add fade in animation
-        successModal.style.animation = 'fadeIn 0.3s ease';
-
-        // Prevent body scroll
-        document.body.style.overflow = 'hidden';
+    if (!formData.get("title").trim()) {
+      alert("Please enter a report title");
+      return;
     }
 
-    // Close Modal (if clicking outside)
-    successModal.addEventListener('click', (e) => {
-        if (e.target === successModal) {
-            closeModal();
-        }
-    });
-
-    // Close Modal Function
-    function closeModal() {
-        successModal.style.animation = 'fadeOut 0.3s ease';
-        setTimeout(() => {
-            successModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }, 300);
+    if (!formData.get("description").trim()) {
+      alert("Please provide a detailed description");
+      return;
     }
 
-    // Add CSS animations
-    const style = document.createElement('style');
-    style.textContent = `
+    if (!document.getElementById("campus").value) {
+      alert("Please select your campus");
+      return;
+    }
+
+    if (!document.getElementById("terms").checked) {
+      alert("Please accept the terms and conditions");
+      return;
+    }
+
+    // Submit report
+    submitReport(formData);
+  });
+
+  // Submit Report
+  async function submitReport(formData) {
+    // Show loading state
+    const submitBtn = document.querySelector(".btn-submit");
+    submitBtn.disabled = true;
+    submitBtn.innerHTML =
+      '<i class="fa-solid fa-spinner fa-spin"></i> <span>Submitting...</span>';
+
+    try {
+      const response = await fetch("/api/submit_report/", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error("Submission failed");
+
+      const data = await response.json();
+
+      // Show success modal
+      showSuccessModal(data.report_id || generateReportId());
+
+      // Reset form
+      reportForm.reset();
+      uploadedFiles = [];
+      fileList.innerHTML = "";
+      titleCount.textContent = "0/100";
+      descriptionCount.textContent = "0/1000";
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      showNotification("Error submitting report. Please try again.", "error");
+    } finally {
+      // Reset button
+      submitBtn.disabled = false;
+      submitBtn.innerHTML =
+        '<i class="fa-solid fa-paper-plane"></i> <span>Submit Report</span>';
+    }
+  }
+
+  // Generate Report ID
+  function generateReportId() {
+    const year = new Date().getFullYear();
+    const random = Math.floor(Math.random() * 1000)
+      .toString()
+      .padStart(3, "0");
+    return `REP-${year}-${random}`;
+  }
+
+  // Show Success Modal
+  function showSuccessModal(reportId) {
+    document.getElementById("generated-report-id").textContent = "#" + reportId;
+    successModal.style.display = "flex";
+
+    // Add fade in animation
+    successModal.style.animation = "fadeIn 0.3s ease";
+
+    // Prevent body scroll
+    document.body.style.overflow = "hidden";
+  }
+
+  // Close Modal (if clicking outside)
+  successModal.addEventListener("click", (e) => {
+    if (e.target === successModal) {
+      closeModal();
+    }
+  });
+
+  // Close Modal Function
+  function closeModal() {
+    successModal.style.animation = "fadeOut 0.3s ease";
+    setTimeout(() => {
+      successModal.style.display = "none";
+      document.body.style.overflow = "auto";
+    }, 300);
+  }
+
+  // Add CSS animations
+  const style = document.createElement("style");
+  style.textContent = `
             @keyframes fadeIn {
                 from {
                     opacity: 0;
@@ -604,16 +646,16 @@
                 }
             }
         `;
-    document.head.appendChild(style);
+  document.head.appendChild(style);
 
-    // Show Notification
-    function showNotification(message, type = 'success') {
-        const toast = document.createElement('div');
-        toast.style.cssText = `
+  // Show Notification
+  function showNotification(message, type = "success") {
+    const toast = document.createElement("div");
+    toast.style.cssText = `
                 position: fixed;
                 top: 80px;
                 right: 20px;
-                background: ${type === 'success' ? '#00D084' : '#F44336'};
+                background: ${type === "success" ? "#00D084" : "#F44336"};
                 color: white;
                 padding: 12px 20px;
                 border-radius: 8px;
@@ -624,17 +666,17 @@
                 font-weight: 600;
                 max-width: 300px;
             `;
-        toast.textContent = message;
-        document.body.appendChild(toast);
+    toast.textContent = message;
+    document.body.appendChild(toast);
 
-        setTimeout(() => {
-            toast.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
-    }
+    setTimeout(() => {
+      toast.style.animation = "slideOut 0.3s ease";
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
 
-    // Add slide animations to style
-    style.textContent += `
+  // Add slide animations to style
+  style.textContent += `
             @keyframes slideIn {
                 from {
                     transform: translateX(100%);
@@ -658,123 +700,126 @@
             }
         `;
 
-    // Auto-save draft (optional feature)
-    let autosaveTimeout;
+  // Auto-save draft (optional feature)
+  let autosaveTimeout;
 
-    function autosaveDraft() {
-        clearTimeout(autosaveTimeout);
+  function autosaveDraft() {
+    clearTimeout(autosaveTimeout);
 
-        autosaveTimeout = setTimeout(() => {
-            const draft = {
-                title: titleInput.value,
-                description: descriptionInput.value,
-                incidentType: document.getElementById('incident-type').value,
-                priority: document.getElementById('priority').value,
-                timestamp: Date.now()
-            };
+    autosaveTimeout = setTimeout(() => {
+      const draft = {
+        title: titleInput.value,
+        description: descriptionInput.value,
+        incidentType: document.getElementById("incident-type").value,
+        priority: document.getElementById("priority").value,
+        timestamp: Date.now(),
+      };
 
-            if (draft.title || draft.description) {
-                localStorage.setItem('report-draft', JSON.stringify(draft));
-                console.log('Draft saved');
-            }
-        }, 2000);
+      if (draft.title || draft.description) {
+        localStorage.setItem("report-draft", JSON.stringify(draft));
+        console.log("Draft saved");
+      }
+    }, 2000);
+  }
+
+  // Listen for input changes to autosave
+  titleInput.addEventListener("input", autosaveDraft);
+  descriptionInput.addEventListener("input", autosaveDraft);
+
+  // Load draft on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedDraft = localStorage.getItem("report-draft");
+
+    if (savedDraft) {
+      const draft = JSON.parse(savedDraft);
+
+      // Check if draft is less than 24 hours old
+      const hoursSinceSave = (Date.now() - draft.timestamp) / (1000 * 60 * 60);
+
+      if (hoursSinceSave < 24) {
+        const restore = confirm(
+          "We found a saved draft. Would you like to restore it?",
+        );
+
+        if (restore) {
+          titleInput.value = draft.title || "";
+          descriptionInput.value = draft.description || "";
+          document.getElementById("incident-type").value =
+            draft.incidentType || "";
+          document.getElementById("priority").value = draft.priority || "";
+
+          // Update character counts
+          titleCount.textContent = `${titleInput.value.length}/100`;
+          descriptionCount.textContent = `${descriptionInput.value.length}/1000`;
+
+          showNotification("Draft restored successfully!");
+        } else {
+          localStorage.removeItem("report-draft");
+        }
+      } else {
+        // Remove old drafts
+        localStorage.removeItem("report-draft");
+      }
+    }
+  });
+
+  // Clear draft after successful submission
+  function clearDraft() {
+    localStorage.removeItem("report-draft");
+  }
+
+  // Warn before leaving with unsaved changes
+  window.addEventListener("beforeunload", (e) => {
+    if (titleInput.value || descriptionInput.value) {
+      e.preventDefault();
+      e.returnValue = "";
+    }
+  });
+
+  // Form validation helpers
+  function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  }
+
+  function validateForm() {
+    const errors = [];
+
+    if (!document.getElementById("incident-type").value) {
+      errors.push("Incident type is required");
     }
 
-    // Listen for input changes to autosave
-    titleInput.addEventListener('input', autosaveDraft);
-    descriptionInput.addEventListener('input', autosaveDraft);
-
-    // Load draft on page load
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedDraft = localStorage.getItem('report-draft');
-
-        if (savedDraft) {
-            const draft = JSON.parse(savedDraft);
-
-            // Check if draft is less than 24 hours old
-            const hoursSinceSave = (Date.now() - draft.timestamp) / (1000 * 60 * 60);
-
-            if (hoursSinceSave < 24) {
-                const restore = confirm('We found a saved draft. Would you like to restore it?');
-
-                if (restore) {
-                    titleInput.value = draft.title || '';
-                    descriptionInput.value = draft.description || '';
-                    document.getElementById('incident-type').value = draft.incidentType || '';
-                    document.getElementById('priority').value = draft.priority || '';
-
-                    // Update character counts
-                    titleCount.textContent = `${titleInput.value.length}/100`;
-                    descriptionCount.textContent = `${descriptionInput.value.length}/1000`;
-
-                    showNotification('Draft restored successfully!');
-                } else {
-                    localStorage.removeItem('report-draft');
-                }
-            } else {
-                // Remove old drafts
-                localStorage.removeItem('report-draft');
-            }
-        }
-    });
-
-    // Clear draft after successful submission
-    function clearDraft() {
-        localStorage.removeItem('report-draft');
+    if (!document.getElementById("priority").value) {
+      errors.push("Priority level is required");
     }
 
-    // Warn before leaving with unsaved changes
-    window.addEventListener('beforeunload', (e) => {
-        if (titleInput.value || descriptionInput.value) {
-            e.preventDefault();
-            e.returnValue = '';
-        }
-    });
-
-    // Form validation helpers
-    function validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
+    if (titleInput.value.trim().length < 10) {
+      errors.push("Title must be at least 10 characters");
     }
 
-    function validateForm() {
-        const errors = [];
-
-        if (!document.getElementById('incident-type').value) {
-            errors.push('Incident type is required');
-        }
-
-        if (!document.getElementById('priority').value) {
-            errors.push('Priority level is required');
-        }
-
-        if (titleInput.value.trim().length < 10) {
-            errors.push('Title must be at least 10 characters');
-        }
-
-        if (descriptionInput.value.trim().length < 50) {
-            errors.push('Description must be at least 50 characters');
-        }
-
-        if (contactInput.value && !validateEmail(contactInput.value)) {
-            errors.push('Please enter a valid email address');
-        }
-
-        if (!document.getElementById('campus').value) {
-            errors.push('Campus selection is required');
-        }
-
-        if (!document.getElementById('terms').checked) {
-            errors.push('You must accept the terms and conditions');
-        }
-
-        return errors;
+    if (descriptionInput.value.trim().length < 50) {
+      errors.push("Description must be at least 50 characters");
     }
 
-    // Show validation errors
-    function showValidationErrors(errors) {
-        const errorMessage = errors.join('\n');
-        alert('Please fix the following errors:\n\n' + errorMessage);
+    if (contactInput.value && !validateEmail(contactInput.value)) {
+      errors.push("Please enter a valid email address");
     }
+
+    if (!document.getElementById("campus").value) {
+      errors.push("Campus selection is required");
+    }
+
+    if (!document.getElementById("terms").checked) {
+      errors.push("You must accept the terms and conditions");
+    }
+
+    return errors;
+  }
+
+  // Show validation errors
+  function showValidationErrors(errors) {
+    const errorMessage = errors.join("\n");
+    alert("Please fix the following errors:\n\n" + errorMessage);
+  }
 </script>
 {% endblock %}

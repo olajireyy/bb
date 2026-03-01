@@ -14,9 +14,9 @@ urlpatterns = [
     path('history/', views.history, name='history'),
     path('reports/', views.reports, name='reports'),
     path('verify-payment/', views.verify_payment, name='verify_payment'),
-    path('about/', views.about, name='about'),
-    path('help/', views.help_center, name='help'),
     path('settings/', views.settings_view, name='settings'),
+    path('notifications/', views.notifications_view, name='notifications'),
+    path('submit-report/', views.submit_report_view, name='submit_report'),
     
     # Alert APIs
     path('api/resolve_alert/<int:scan_id>/', views.resolve_alert, name='resolve_alert'),
@@ -30,8 +30,10 @@ urlpatterns = [
     
     # Reports API
     path('api/submit_report/', views.submit_report_api, name='submit_report_api'),
+    path('api/report_details/<str:report_id>/', views.get_report_details, name='get_report_details'),
 
     # Profile API
     path('api/update_profile/', views.update_profile_api, name='update_profile_api'),
     path('api/delete_account/', views.delete_account_api, name='delete_account_api'),
+    path('api/change_password/', views.change_password_api, name='change_password_api'),
 ]

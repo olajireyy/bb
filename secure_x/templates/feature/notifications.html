@@ -1,0 +1,110 @@
+{% extends 'core/base.html' %} {% block content %}{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberSense Hub - Notifications</title>
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <!-- CSS (reusing history css + inline tweaks for simplicity) -->
+    <link rel="stylesheet" href="{% static 'css/history.css' %}" />
+    <style>
+      .history-card {
+        border-left: 4px solid #00d084;
+      }
+      .history-card[data-risk="high"] {
+        border-left-color: #ef4444;
+      }
+      .history-card[data-risk="medium"] {
+        border-left-color: #f59e0b;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-content">
+        <a href="/menu/" class="back-btn">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div class="logo">
+          <i class="fa-solid fa-bell"></i>
+          <h1>Notifications</h1>
+        </div>
+        <div class="header-right">
+          <button class="filter-btn" id="filter-btn" style="visibility: hidden">
+            <i class="fa-solid fa-filter"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="history-container">
+      <!-- Page Title -->
+      <div class="page-title">
+        <h2>Recent Alerts</h2>
+        <p>Stay updated with security scans and system messages</p>
+      </div>
+
+      <!-- Alerts List -->
+      <div class="history-list">
+        {% for scan in notifications %}
+        <div
+          class="history-card"
+          data-type="{{ scan.scan_type }}"
+          data-risk="{{ scan.risk_level }}"
+        >
+          <div class="history-header">
+            <div class="scan-type-icon {{ scan.scan_type }}">
+              <i
+                class="fa-solid {% if scan.scan_type == 'image' %}fa-file-image{% elif scan.scan_type == 'link' %}fa-link{% else %}fa-message{% endif %}"
+              ></i>
+            </div>
+            <div class="history-main">
+              <h3>
+                {% if scan.patterns and scan.patterns.0 %}{{
+                scan.patterns.0.title }}{% else %}Scan Result: {{
+                scan.scan_type|title }}{% endif %}
+              </h3>
+              <p class="history-preview">
+                Status: {{ scan.risk_level|title }} Risk Detected.
+              </p>
+              <div class="history-meta">
+                <span class="scan-date"
+                  ><i class="fa-solid fa-clock"></i> {{
+                  scan.created_at|timesince }} ago</span
+                >
+                <span class="scan-id">#SC-{{ scan.id }}</span>
+              </div>
+            </div>
+            <div class="risk-badge {{ scan.risk_level }}">
+              <i
+                class="fa-solid {% if scan.risk_level == 'high' %}fa-shield-halved{% elif scan.risk_level == 'medium' %}fa-triangle-exclamation{% else %}fa-check-circle{% endif %}"
+              ></i>
+              <span>{{ scan.risk_level|upper }}</span>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="empty-state" style="display: block">
+          <i class="fa-solid fa-bell-slash"></i>
+          <h3>No Notifications</h3>
+          <p>You're all caught up! No recent alerts found.</p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Bottom Spacer -->
+      <div class="bottom-spacer"></div>
+    </main>
+  </body>
+</html>
+{% endblock %}

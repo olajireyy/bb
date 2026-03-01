@@ -4,6 +4,7 @@ from django.conf import settings
 class ScanHistory(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='scans')
     scan_type = models.CharField(max_length=20) # 'text', 'link', 'image'
+    scanned_content = models.TextField(blank=True, null=True) # store what was scanned
     risk_level = models.CharField(max_length=20) # 'low', 'medium', 'high'
     risk_score = models.IntegerField(default=0)
     patterns = models.JSONField(blank=True, null=True) # store detected patterns as JSON
