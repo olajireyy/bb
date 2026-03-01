@@ -75,11 +75,11 @@
                 <div class="form-group">
                     <label for="user-type">User Type</label>
                     <select id="user-type">
-                        <option value="student" {% if request.user.user_type=='student' %}selected{% endif %}>Student
+                        <option value="student" {% if request.user.user_type =='student' %}selected{% endif %}>Student
                         </option>
-                        <option value="business" {% if request.user.user_type=='business' %}selected{% endif %}>Business
+                        <option value="business" {% if request.user.user_type =='business' %}selected{% endif %}>Business
                             Owner</option>
-                        <option value="institution" {% if request.user.user_type=='institution' %}selected{% endif %}>
+                        <option value="institution" {% if request.user.user_type =='institution' %}selected{% endif %}>
                             Institution</option>
                     </select>
                 </div>
